@@ -1,0 +1,15 @@
+.centreText {
+    text-align: center;
+}
+.leftTeft {
+    text-align: left;
+    font-family: 'Grenze Gotisch', cursive;
+}
+.rightText {
+    text-align: right;
+}
+.brownGrad {
+    min-height: 100vh;
+    margin: 0;
+    background: linear-gradient(116.53deg, #F4991A 0%, rgba(50, 19, 19, 0.9) 99.58%);
+}
