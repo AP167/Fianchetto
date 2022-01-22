@@ -1,0 +1,23 @@
+.board{
+    height: 80vh;
+    width: 80vh;
+    display: grid;
+    grid-template-rows: repeat(8, 10vh);
+    grid-template-columns: repeat(8, 10vh);
+}
+
+.black-tile{
+    background-color: rgb(165, 129, 100);
+}
+.white-tile{
+    background-color: rgb(218, 199, 175);
+}
+
+.piece-image{
+    height: 8vh;
+}
+
+.tile{
+    display: grid;
+    place-content: center;
+}
