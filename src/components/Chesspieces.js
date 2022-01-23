@@ -12,6 +12,7 @@ class ChessPiece{
     }
 }
 
+//initializing the board
 var tiles = new Array(8)
 for (var i = 0; i<8; i++){
     tiles[i] = new Array(8)
@@ -27,9 +28,9 @@ for (var i = 0; i<8; i++){
         else if ((i===0 || i===7) && (j===2 || j===5))
             tiles[i][j] = new ChessPiece(i===0 ? "bishop_w": "bishop_b", j===2 ? "1" : "2", i, j)
         else if ((i===0 || i===7) && (j===3))
-            tiles[i][j] = new ChessPiece(i===0 ? "queen_w": "queen_b", i, j)
+            tiles[i][j] = new ChessPiece(i===0 ? "queen_w": "queen_b", "", i, j)
         else if ((i===0 || i===7) && (j===4))
-            tiles[i][j] = new ChessPiece(i===0 ? "king_w": "king_b", i, j)
+            tiles[i][j] = new ChessPiece(i===0 ? "king_w": "king_b", "", i, j)
         else
             tiles[i][j] = null
     }

@@ -7,6 +7,13 @@ import { tiles } from './Chesspieces'
 const rows = ["1", "2", "3", "4", "5", "6", "7", "8"]
 const columns = ["a", "b", "c", "d", "e", "f", "g", "h"]
 
+const pieceColour = (piece) => {
+    if (piece[piece.length-1]==="b" || piece[piece.length-2]==="b")
+        return "b"
+    else
+        return "w"
+}
+
 const allowDrop = (event) => {
     event.preventDefault()
 }
@@ -14,7 +21,16 @@ const allowDrop = (event) => {
 const drop = (event) => {
     event.preventDefault()
     var dropped = event.dataTransfer.getData("text")
-    event.target.appendChild(document.getElementById(dropped))
+    var droppedAt = event.target.id
+    // console.log("dropped " + dropped + " at " + droppedAt)
+    if (droppedAt.startsWith("tile")){
+        event.target.appendChild(document.getElementById(dropped))
+    } 
+    else if (pieceColour(dropped) !== pieceColour(droppedAt)) {
+        var parentTile = document.getElementById(droppedAt).parentElement
+        document.getElementById(droppedAt).remove()
+        parentTile.appendChild(document.getElementById(dropped))
+    } 
 }
 
 const dragStartHandler = (event) => {
