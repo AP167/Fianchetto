@@ -18,7 +18,7 @@ for (var i = 0; i<8; i++){
     tiles[i] = new Array(8)
     for (var j=0; j<8; j++){
         if (i===1)
-            tiles[i][j]=new ChessPiece("pawn_w", (j+1).toString(), i, j)
+            tiles[i][j] = new ChessPiece("pawn_w", (j+1).toString(), i, j)
         else if (i===6)
             tiles[6][j] = new ChessPiece("pawn_b", (j+1).toString(), i, j)
         else if ((i===0 || i===7) && (j===0 || j===7))
