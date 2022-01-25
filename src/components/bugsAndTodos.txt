@@ -1,0 +1,22 @@
+While appending a piece on a tile, if the tile already contains a 
+piece, where it was somehow dropped outside the image of the 
+existing piece but inside the tile, then the piece gets dropped 
+and appended to the tile. So the tile now has 2 pieces. 
+Either enclose the image in a div that covers the entire tile,
+or use tile[][] information to see if has a Chesspiece object or not.
+
+Update tile[][] information after every change. ✅
+
+Pawns capture vertically for now, change this. ✅
+
+Pawns cannot move 2 places in first move, change this. ✅
+
+Add properties like castling and pawn promotion.
+
+Keep track of x, y positions of each ChessPiece objects.
+
+Use useState if necessary.
+
+Highlight valid moves.
+
+Fix the key prop warning.

@@ -8,6 +8,7 @@ class ChessPiece{
         this.pId = pieceName + pId
         this.x = x
         this.y = y
+        this.firstMove = true
         this.pieceImage = "./images/"+pieceName.toString()+".png"
     }
 }
