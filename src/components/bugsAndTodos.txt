@@ -14,14 +14,21 @@ Pawns cannot move 2 places in first move, change this. ✅
 
 Check which player's turn it is. ✅
 
-Add properties like castling, pawn promotion and en passant.
+Castling
+Pawn promotion  ✅
+En passant
+Check
+Checkmate
+
+The pawn doesn't change immediately after promotion. Find a way to call setTiles after changing
+tiles value.  ✅
 
 Keep track of x, y positions of each ChessPiece objects.
 
-Use useState if necessary.
+Use useState for tile data. ✅
+
+Store data locally.
 
 Highlight valid moves.
 
 Fix the key prop warning.
-
-Check for checks and checkmate.

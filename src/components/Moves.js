@@ -4,7 +4,7 @@ import { pieceColour } from './Chessboard'
 var player = "w"
 
 const validPlayer = (piece) => {
-  return pieceColour(piece)==player
+  return pieceColour(piece)===player
 }
 
 const pawnMove = (piece, start, end, tiles) => {
@@ -87,10 +87,20 @@ const validPieceMove = (piece, start, end, tiles) => {
 
 const validMove = (piece, start, end, tiles) => {
   if (validPieceMove(piece, start, end, tiles) && validPlayer(piece)){
-    player = player=="w" ? "b" : "w"
+    player = player==="w" ? "b" : "w"
     return true
   }
 }
+
+// const pawnPromotion = (piece, pos) => {
+//   if (piece.startsWith("pawn")){
+//     if (pieceColour(piece)==="w" && pos[0]===7)
+//       return true
+//     if (pieceColour(piece)==="b" && pos[0]===0)
+//       return true
+//   }
+//   return false
+// }
 
 
 const Moves = () => {

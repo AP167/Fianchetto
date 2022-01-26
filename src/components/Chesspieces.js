@@ -40,11 +40,11 @@ for (var i = 0; i<8; i++){
 
 const Chesspieces = (props) => {
     
-    if (tiles[props.i][props.j])
+    if (props.tilesData[props.i][props.j])
         return (
             <img className='piece-image' 
-            src={tiles[props.i][props.j].pieceImage} 
-            alt={tiles[props.i][props.j].pieceName}
+            src={props.tilesData[props.i][props.j].pieceImage} 
+            alt={props.tilesData[props.i][props.j].pieceName}
             id={props.id}
             onDragStart={props.onDragStart} />
         )
@@ -53,4 +53,4 @@ const Chesspieces = (props) => {
 }
 
 export default Chesspieces
-export {tiles}
+export {tiles, ChessPiece}
