@@ -50,7 +50,7 @@ const Chesspieces = (props) => {
         )
     else
         return <div id={props.id}></div>
-};
+}
 
 export default Chesspieces
 export {tiles}

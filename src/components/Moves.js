@@ -1,6 +1,12 @@
 import React from 'react'
 import { pieceColour } from './Chessboard'
 
+var player = "w"
+
+const validPlayer = (piece) => {
+  return pieceColour(piece)==player
+}
+
 const pawnMove = (piece, start, end, tiles) => {
   var x = end[0] - start[0]
   var y = end[1] - start[1]
@@ -63,7 +69,7 @@ const kingMove = (start, end) => {
   return Math.abs(end[0]-start[0])<=1 && Math.abs(end[1]-start[1])<=1
 }
 
-const validMove = (piece, start, end, tiles) => {
+const validPieceMove = (piece, start, end, tiles) => {
   if (piece.startsWith("pawn"))
     return pawnMove(piece, start, end, tiles)
   if (piece.startsWith("rook"))
@@ -77,6 +83,13 @@ const validMove = (piece, start, end, tiles) => {
   if (piece.startsWith("king"))
     return kingMove(start, end)
   return false
+}
+
+const validMove = (piece, start, end, tiles) => {
+  if (validPieceMove(piece, start, end, tiles) && validPlayer(piece)){
+    player = player=="w" ? "b" : "w"
+    return true
+  }
 }
 
 
