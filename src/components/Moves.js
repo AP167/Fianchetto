@@ -3,20 +3,100 @@ import { pieceColour } from './Chessboard'
 
 var player = "w"
 
+var enPassant = [null, null, "no"]
+var kW = [0, 4]
+var kB = [7, 4]
+
 const validPlayer = (piece) => {
   return pieceColour(piece)===player
+}
+
+const validTilePos = (x, y) => {
+  return 0<=x && x<8 && 0<=y && y<8
+}
+
+const isCheck = (colour, tiles) => {
+  var curr
+  var pos = colour==="w" ? kW : kB
+  // console.log(colour, pos)
+  // console.log(tiles)
+  const scan = (endI, endJ, stepI, stepJ, attacker) => {
+    for (var i=pos[0]+stepI, j=pos[1]+stepJ; i!==endI && j!==endJ; i+=stepI, j+=stepJ){
+      curr = tiles[i][j]
+      if (curr){
+        if (pieceColour(curr.pieceName)!==colour && 
+            (curr.pieceName.startsWith(attacker) || curr.pieceName.startsWith("queen"))){
+              console.log("under attack of ", i,j , curr.pieceName)
+          return true
+        }
+        break
+      }
+    }
+    return false
+  }
+
+  const scanKnight = (I, J) => {
+    for (var i = -I; i<=I; i = i + (2*I)){
+      for (var j = -J; j<=J; j = j + (2*J)){
+        if (validTilePos(pos[0]+i, pos[1]+j)){
+          // console.log("checking tile ", pos[0] + i, pos[1] + j, "i, j",i, j)
+          curr = tiles[pos[0] + i][pos[1] + j]
+          if (curr && pieceColour(curr.pieceName)!==colour && curr.pieceName.startsWith("knight")){
+            console.log("under attack of ", i,j , curr.pieceName)
+            return true
+          }
+        }
+      }
+    }
+  }
+
+  const scanPawn = () => {
+    var sign = colour==="w" ? 1 : -1
+    var i=pos[0], j=pos[1]
+    if (validTilePos(i+sign, j-1) && tiles[i+sign][j-1]){
+      curr = tiles[i+sign][j-1]
+      if (pieceColour(curr.pieceName)!==colour && curr.pieceName.startsWith("pawn"))
+        return true
+    } 
+    if (validTilePos(i+sign, j+1) && tiles[i+sign][j+1]){
+      curr = tiles[i+sign][j+1]
+      if (pieceColour(curr.pieceName)!==colour && curr.pieceName.startsWith("pawn"))
+        return true
+    } 
+  }
+
+  if (scan(8, 8, 1, 0, "rook") || scan(-1, -1, -1, 0, "rook") || 
+      scan(8, 8, 0, 1, "rook") || scan(-1, -1, 0, -1, "rook") || 
+      scan(8, 8, 1, 1, "bishop") || scan(-1, 8, -1, 1, "bishop") || 
+      scan(8, -1, 1, -1, "bishop") || scan(-1, -1, -1, -1, "bishop") ||
+      scanKnight(1, 2) || scanKnight(2, 1) || scanPawn())
+    return true
 }
 
 const pawnMove = (piece, start, end, tiles) => {
   var x = end[0] - start[0]
   var y = end[1] - start[1]
   var sign = pieceColour(piece)==="w" ? 1 : -1
-  if (tiles[end[0]][end[1]])
-    return x===sign && Math.abs(y)===1 //colour of captured piece is already checked in Chessboard.js
-  if (x===sign*2 && y===0 && tiles[start[0]][start[1]].firstMove)
-    return tiles[start[0]+sign][start[1]]==null && tiles[end[0]][start[1]]==null
+
+  if (x===sign*2 && y===0 && tiles[start[0]][start[1]].firstMove){
+    if (tiles[start[0]+sign][start[1]]==null && tiles[end[0]][start[1]]==null){
+      enPassant = [start[0]+sign, start[1], "nextMove"]
+      return true
+    } 
+  }
+
+  if (x===sign && Math.abs(y)===1){
+    if (end[0]===enPassant[0] && end[1]===enPassant[1]){
+      tiles[end[0]-sign][end[1]] = null
+      return true
+    }
+    if (tiles[end[0]][end[1]])
+      return x===sign && Math.abs(y)===1 //colour of captured piece is already checked in Chessboard.js
+  }
+
   if (x===sign && y===0)
     return tiles[end[0]][start[1]]==null
+  
   return false
 }
 
@@ -65,8 +145,15 @@ const queenMove = (start, end, tiles) => {
   return rookMove(start, end, tiles) || bishopMove(start,end, tiles)
 }
 
-const kingMove = (start, end) => {
-  return Math.abs(end[0]-start[0])<=1 && Math.abs(end[1]-start[1])<=1
+const kingMove = (piece, start, end) => {
+  if (Math.abs(end[0]-start[0])<=1 && Math.abs(end[1]-start[1])<=1){
+    if (pieceColour(piece)==="w"){
+      kW = end
+    } else {
+      kB = end
+    }
+    return true
+  }
 }
 
 const validPieceMove = (piece, start, end, tiles) => {
@@ -81,26 +168,49 @@ const validPieceMove = (piece, start, end, tiles) => {
   if (piece.startsWith("queen"))
     return queenMove(start, end, tiles)
   if (piece.startsWith("king"))
-    return kingMove(start, end)
+    return kingMove(piece, start, end)
   return false
 }
 
 const validMove = (piece, start, end, tiles) => {
   if (validPieceMove(piece, start, end, tiles) && validPlayer(piece)){
-    player = player==="w" ? "b" : "w"
-    return true
+
+    var check = false
+
+    var temp = tiles[end[0]][end[1]]
+    tiles[end[0]][end[1]] = tiles[start[0]][start[1]]
+    tiles[start[0]][start[1]] = null
+
+    // console.log(tiles)
+    
+    if(isCheck(pieceColour(piece), tiles)){
+      console.log(pieceColour(piece),"king under attack")
+      if(piece.startsWith("king_w"))
+        kW = start
+      else if(piece.startsWith("king_b"))
+        kB = start
+      check = true
+    }
+
+    // console.log(temp)
+
+    tiles[start[0]][start[1]] = tiles[end[0]][end[1]]
+    tiles[end[0]][end[1]] = temp
+
+    // console.log(tiles)
+
+    if (!check){
+      player = player==="w" ? "b" : "w"
+
+      if (enPassant[2]==="nextMove")
+        enPassant[2] = "thisMove"
+      else if (enPassant[2]==="thisMove")
+        enPassant = [null, null, "no"]
+
+      return true
+    }
   }
 }
-
-// const pawnPromotion = (piece, pos) => {
-//   if (piece.startsWith("pawn")){
-//     if (pieceColour(piece)==="w" && pos[0]===7)
-//       return true
-//     if (pieceColour(piece)==="b" && pos[0]===0)
-//       return true
-//   }
-//   return false
-// }
 
 
 const Moves = () => {

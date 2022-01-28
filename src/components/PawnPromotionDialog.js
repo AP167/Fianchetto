@@ -3,9 +3,9 @@ import './PawnPromotionDialog.css'
 import { promotePawnTo } from './Chessboard'
 import { pieceColour } from './Chessboard'
 
-var promoteTo = null;
-var oldPiece = null;
-var pawnPosition = null;
+var promoteTo = null
+var oldPiece = null
+var pawnPosition = null
 
 const promote = (event) => {
     event.preventDefault()
@@ -15,7 +15,11 @@ const promote = (event) => {
             promoteTo = form.elements[i].value
         }
     }
-    promotePawnTo(promoteTo, oldPiece, pawnPosition)
+    if (promoteTo!==null)
+        promotePawnTo(promoteTo, oldPiece, pawnPosition)
+    else
+        alert("Please choose a piece to promote your pawn")
+    promoteTo = null
 }
 
 const pawnPromotion = (piece, pos) => {

@@ -16,8 +16,8 @@ Check which player's turn it is. ✅
 
 Castling
 Pawn promotion  ✅
-En passant
-Check
+En passant  ✅
+Check  ✅ 
 Checkmate
 
 The pawn doesn't change immediately after promotion. Find a way to call setTiles after changing

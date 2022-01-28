@@ -29,22 +29,27 @@ const promotePawnTo = (piece, oldPiece, pos) => {
 
 
 // const getLocalData = () => {
-//     const lists = localStorage.getItem("mytodolist")
-//     if (lists)
-//         return JSON.parse(lists)
-//     return tiles
+//     const lists = localStorage.getItem("boardStatus")
+//     if (lists){
+//         var oldData =  JSON.parse(lists)
+//         for (var i=0; i<8; i++){
+//             for (var j=0; j<8; j++){
+//                 tiles[i][j]=oldData[i][j]
+//             }
+//         }
+//     }
 // }
 
 
 const Chessboard = () => {
 
-    // tiles = getLocalData()
+    // getLocalData()
     const [turn, setTurn] = React.useState("w")
     const [temp, setTemp] = React.useState(0)
     const [tilesData, setTilesData] = React.useState(tiles)
     // React.useEffect(() => {
-    //     localStorage.setItem("boardStatus", JSON.stringify(tiles))
-    // }, [tiles])
+    //     localStorage.setItem("boardStatus", JSON.stringify(tilesData))
+    // }, [turn, tilesData])
 
     const setNewState = () => {
         setTemp((temp+1)%10)
@@ -73,30 +78,16 @@ const Chessboard = () => {
         var start = [startX, startY]
         var end = [endX, endY]
 
-    
-        
         if (validMove(droppedId, start, end, tiles))
         {
-            if (droppedAtId.startsWith("tile")){
-                // droppedAt.appendChild(dropped)
+            if (droppedAtId.startsWith("tile") || pieceColour(droppedId) !== pieceColour(droppedAtId)){
                 setTurn(turn==="w" ? "b" : "w")
                 tiles[endX][endY] = tiles[startX][startY]
                 tiles[startX][startY] = null
                 tiles[endX][endY].firstMove = false
                 setTilesData(tiles)
                 pawnPromotion(droppedId, end)
-            } 
-            else if (pieceColour(droppedId) !== pieceColour(droppedAtId)) {
-                // var parentTile = droppedAt.parentElement
-                // droppedAt.remove()
-                // parentTile.appendChild(dropped)
-                setTurn(turn==="w" ? "b" : "w")
-                tiles[endX][endY] = tiles[startX][startY]
-                tiles[startX][startY] = null
-                tiles[endX][endY].firstMove = false
-                setTilesData(tiles)
-                pawnPromotion(droppedId, end)
-            } 
+            }
         }
     }
     
