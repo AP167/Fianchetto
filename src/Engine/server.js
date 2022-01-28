@@ -99,7 +99,7 @@ function serve(req, res)
     url = decodeURI(url);
     
     /// Redirect dirs to index.html.
-    url = url.replace(/(.*\/)$/, "$1index.html");
+    url = url.replace(/(.*\/)$/, "$1test.html");
     
     filename = p.join(dir, url);
     
