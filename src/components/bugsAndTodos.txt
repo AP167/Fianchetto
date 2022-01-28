@@ -19,13 +19,14 @@ Pawn promotion  ✅
 En passant  ✅
 Check  ✅ 
 Checkmate
+Stalemate
 
 The pawn doesn't change immediately after promotion. Find a way to call setTiles after changing
 tiles value.  ✅
 
-If en passant is invalid because it is exposing the king, there will be problems 
-as the opponent pawn gets removed without dropping the piece on it, and tiles[][] is changed. So
-we cannot bring back the captured pawn. Put checks for bringing back the pawn.
+If the pieces in a row are rook_b...pawn_w pawn_b...king_w and pawn_w captures pawn_b by en passant,
+it will be taken as a valid move even if the king is getting exposed to the rook. Put 
+isPositionSafe() checks for en passant.
 
 Keep track of x, y positions of each ChessPiece objects.
 
