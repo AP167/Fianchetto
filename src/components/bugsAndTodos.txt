@@ -14,7 +14,7 @@ Pawns cannot move 2 places in first move, change this. ✅
 
 Check which player's turn it is. ✅
 
-Castling
+Castling  ✅
 Pawn promotion  ✅
 En passant  ✅
 Check  ✅ 
@@ -22,6 +22,10 @@ Checkmate
 
 The pawn doesn't change immediately after promotion. Find a way to call setTiles after changing
 tiles value.  ✅
+
+If en passant is invalid because it is exposing the king, there will be problems 
+as the opponent pawn gets removed without dropping the piece on it, and tiles[][] is changed. So
+we cannot bring back the captured pawn. Put checks for bringing back the pawn.
 
 Keep track of x, y positions of each ChessPiece objects.
 
