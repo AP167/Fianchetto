@@ -2,7 +2,7 @@ import React from 'react'
 import './Chessboard.css'
 import Chesspieces from './Chesspieces'
 import { tiles, ChessPiece } from './Chesspieces'
-import { validMove, isCheck, isStalemate } from './Moves'
+import { validMove, isCheck, isStalemate, getPlayer } from './Moves'
 import { pawnPromotion } from './PawnPromotionDialog'
 import { showResult } from './ResultDialog'
 import * as engine from '../Engine/myEngine'
@@ -11,11 +11,43 @@ import * as engine from '../Engine/myEngine'
 const rows = ["1", "2", "3", "4", "5", "6", "7", "8"]
 const columns = ["a", "b", "c", "d", "e", "f", "g", "h"]
 
-var promotedCountW = 3, promotedCountB = 3
+var movesList = []
 
+var promotedCountW = 3, promotedCountB = 3
+var opponent = "b"
+
+const setOpponent = (opp) => {
+    opponent = opp
+    document.getElementById("play-menu").style.visibility="hidden"
+    document.getElementById("play-menu").style.zIndex="-5"
+}
 
 const stockfishMove = (predictions) => {
     console.log(predictions)
+    var startPos = predictions.get("from")
+    var endPos = predictions.get("to")
+    var start = [parseInt(startPos[1])-1, startPos[0].charCodeAt(0)-97]
+    var end = [parseInt(endPos[1])-1, endPos[0].charCodeAt(0)-97]
+    if (tiles[start[0]][start[1]]){
+        var piece = tiles[start[0]][start[1]].pId
+        console.log(start, end, piece)
+        if (validMove(piece, start, end, tiles)){
+            console.log("Moving ", tiles[start[0]][start[1]].pId)
+            tiles[end[0]][end[1]] = tiles[start[0]][start[1]]
+            tiles[start[0]][start[1]] = null
+            tiles[end[0]][end[1]].firstMove = false
+
+            movesList.push(startPos+endPos)
+            console.log(movesList)
+
+            Chessboard.setOpponentState(piece)
+
+        } else {
+            engine.predict(movesList)
+        }
+    } else {
+        engine.predict(movesList)
+    }
 }
 engine.newgame()
 engine.listen(stockfishMove)
@@ -39,10 +71,17 @@ const promotePawnTo = (piece, oldPiece, pos) => {
         count = promotedCountB.toString()
         promotedCountB = (promotedCountB+1)%10
     }
+
     tiles[pos[0]][pos[1]] = new ChessPiece(`${piece}_${pieceColour(oldPiece)}`, count, pos[0], pos[1])
+    movesList[movesList.length - 1] = movesList[movesList.length - 1] + piece[0]
+    console.log(movesList)
+
     document.getElementById("dialog-container").style.visibility="hidden"
-    document.getElementById("dialog-container").style.zIndex="3"
+    document.getElementById("dialog-container").style.zIndex="-3"
+
     Chessboard.setNewState(piece)
+
+    engine.predict(movesList)
 }
 
 
@@ -72,15 +111,28 @@ const Chessboard = () => {
     const setNewState = (newPiece) => {
         setTemp((temp+1)%10)
         setTilesData(tiles)
-        // if (isStalemate(tiles)){
-        //     if(isCheck(pieceColour(newPiece)==="w" ? "b" : "w", tiles))
-        //       showResult("Checkmate", pieceColour(newPiece))
-        //     else
-        //       showResult("Stalemate", "d")
-        // }
+        if (isStalemate(tiles)){
+            if(isCheck(pieceColour(newPiece)==="w" ? "b" : "w", tiles))
+              showResult("Checkmate", pieceColour(newPiece))
+            else
+              showResult("Stalemate", "d")
+        }
     }
 
     Chessboard.setNewState = setNewState
+
+    const setOpponentState = (newPiece) => {
+        setTurn(turn==="w" ? "b" : "w")
+        setTilesData(tiles)
+        if (isStalemate(tiles)){
+            if(isCheck(pieceColour(newPiece)==="w" ? "b" : "w", tiles))
+              showResult("Checkmate", pieceColour(newPiece))
+            else
+              showResult("Stalemate", "d")
+        }
+    }
+
+    Chessboard.setOpponentState = setOpponentState
 
     const allowDrop = (event) => {
         event.preventDefault()
@@ -102,10 +154,9 @@ const Chessboard = () => {
         var start = [startX, startY]
         var end = [endX, endY]
 
-        console.log("Before checking", tiles[startX][startY], tiles[endX][endY])
-        engine.predict(["f2f3"])
+        
 
-        if (validMove(droppedId, start, end, tiles))
+        if (turn!==opponent && validMove(droppedId, start, end, tiles))
         {
             if (droppedAtId.startsWith("tile") || pieceColour(droppedId) !== pieceColour(droppedAtId)){
                 setTurn(turn==="w" ? "b" : "w")
@@ -114,12 +165,21 @@ const Chessboard = () => {
                 tiles[startX][startY] = null
                 tiles[endX][endY].firstMove = false
                 setTilesData(tiles)
+
+                movesList.push(columns[startY]+rows[startX]+columns[endY]+rows[endX])
+                console.log(movesList)
+
                 pawnPromotion(droppedId, end)
+
                 if (isStalemate(tiles)){
                     if(isCheck(pieceColour(droppedId)==="w" ? "b" : "w", tiles))
                       showResult("Checkmate", pieceColour(droppedId))
                     else
                       showResult("Stalemate", "d")
+                }
+                if (getPlayer()===opponent){
+                    console.log("opponents turn")
+                    engine.predict(movesList)
                 }
             }
         }
@@ -164,5 +224,5 @@ const Chessboard = () => {
 }
 
 export default Chessboard
-export {pieceColour, promotePawnTo}
+export {pieceColour, promotePawnTo, setOpponent}
 

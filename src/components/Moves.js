@@ -8,6 +8,8 @@ var enPassant = [null, null, "no"]
 var kW = [0, 4]
 var kB = [7, 4]
 
+const getPlayer = () => player
+
 const validPlayer = (piece) => {
   return pieceColour(piece)===player
 }
@@ -153,8 +155,7 @@ const kingMove = (piece, start, end) => {
 const isCheck = (colour, tiles) => {
   var curr
   var pos = colour==="w" ? kW : kB
-  // console.log(colour, pos)
-  // console.log(tiles)
+
   const scan = (endI, endJ, stepI, stepJ, attacker) => {
     for (var i=pos[0]+stepI, j=pos[1]+stepJ; i!==endI && j!==endJ; i+=stepI, j+=stepJ){
       curr = tiles[i][j]
@@ -244,7 +245,6 @@ const isPositionSafe = (piece, start, end, tiles) => {
 
 
 const isStalemate = (tiles) => {
-  console.log("inside stalemate")
 
   var colour = player
 
@@ -377,7 +377,7 @@ const validMove = (piece, start, end, tiles) => {
   if (!isPositionSafe(piece, start, end, tiles))
     return false
 
-  console.log("Position safe : ", true)
+
   if (validPieceMove(piece, start, end, tiles)){
     player = player==="w" ? "b" : "w"
 
@@ -398,4 +398,4 @@ const Moves = () => {
 }
 
 export default Moves
-export {validMove, isCheck, isStalemate}
+export {validMove, isCheck, isStalemate, getPlayer}
