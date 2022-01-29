@@ -1,0 +1,53 @@
+#result-container{
+    height: 100vh;
+    width: 100vw;
+    background-color: #13121185;
+    z-index: -3;
+    visibility: hidden;
+    position: fixed;
+    display: grid;
+    place-content: center;
+}
+
+.result-dialog{
+    height: 80vh;
+    width: 50vw;
+    background-color: rgb(218, 199, 175);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+    margin: 10vh;
+}
+
+.game-status{
+    color: rgb(65, 44, 21);
+    margin: 5vh;
+}
+
+.winner-container{
+    height: 30vh;
+    padding: 2vh 10vw 2vh 10vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.winner-text{
+    text-align: center;
+}
+
+.okay-button{
+    margin: 8vh;
+    width: 10vw;
+    padding: 2vh;
+    text-align: center;
+    background-color: rgb(134, 102, 62);
+    border: 2px solid rgb(71, 54, 38);
+    border-radius: 2px;
+}
+.okay-button:hover{
+    background-color: rgb(153, 117, 73);
+}

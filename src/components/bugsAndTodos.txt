@@ -28,6 +28,9 @@ If the pieces in a row are rook_b...pawn_w pawn_b...king_w and pawn_w captures p
 it will be taken as a valid move even if the king is getting exposed to the rook. Put 
 isPositionSafe() checks for en passant.
 
+Name the promoted pawns based on colour, otherwise the id can exceed 9 and pieceColour() works only
+for ids having single digit numbers.
+
 Keep track of x, y positions of each ChessPiece objects.
 
 Use useState for tile data. ✅

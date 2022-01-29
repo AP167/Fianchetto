@@ -196,6 +196,7 @@ const isCheck = (colour, tiles) => {
 
 
 const isPositionSafe = (piece, start, end, tiles) => {
+  // console.log("checking ", piece, " from ", start, " to ", end)
   var check = false
 
   var temp = tiles[end[0]][end[1]]
@@ -221,6 +222,112 @@ const isPositionSafe = (piece, start, end, tiles) => {
   tiles[end[0]][end[1]] = temp
 
   return !check
+}
+
+
+const isStalemate = (tiles) => {
+
+  var colour = player
+
+  const movesLeft = (piece, start, endI, endJ, stepI, stepJ) => {
+
+    for (var i=start[0]+stepI, j=start[1]+stepJ; i!==endI && j!==endJ; i+=stepI, j+=stepJ){
+      if (tiles[i][j] && pieceColour(tiles[i][j].pieceName)===colour)
+        return false
+      if (isPositionSafe(piece, start, [i, j], tiles)){
+        console.log(piece + " can be moved")
+        return true
+      }
+    }
+
+    return false
+  }
+
+  const knightMovesLeft = (piece, start, I, J) => {
+    for (var i = -I; i<=I; i = i + (2*I)){
+      for (var j = -J; j<=J; j = j + (2*J)){
+        if (validTilePos(start[0]+i, start[1]+j)){
+          var end = [start[0] + i, start[1] + j]
+          // console.log("checking tile ", end)
+          if (!tiles[end[0]][end[1]] || pieceColour(tiles[end[0]][end[1]].pieceName)!==colour){
+            if (isPositionSafe(piece, start, end, tiles)){
+              console.log(piece + " can be moved to " + end)
+              return true
+            }
+          }
+        }
+      }
+    }
+    return false
+  }
+
+  const pawnMovesLeft = (piece, start) => {
+    var sign = colour==="w" ? 1 : -1
+    for (var j=start[1]-1; j<=start[1]+1; j++){
+      if (validTilePos(start[0]+sign, j) && isPositionSafe(piece, start, [start[0]+sign, j], tiles)){
+        if (pawnMove(piece, start, [start[0]+sign, j], tiles)){
+          console.log(piece + " can be moved")
+          return true
+        }
+      }
+    }
+    if (validTilePos(start[0]+(sign*2), start[1]) && 
+        isPositionSafe(piece, start, [start[0]+(sign*2), start[1]], tiles)){
+      if (pawnMove(piece, start, [start[0]+(sign*2), start[1]], tiles)){
+        console.log(piece + " can be moved")
+        return true
+      }
+    }
+    return false
+  } 
+
+  const kingMovesLeft = (piece, start) => {
+    for (var i=start[0]-1; i<=start[0]+1; i++){
+      for (var j=start[1]-1; j<=start[1]+1; j++){
+        if (i!==start[0] || j!==start[1]){
+          if (validTilePos(i, j) && (!tiles[i][j] || pieceColour( tiles[i][j].pieceName)!==colour)){
+            if (isPositionSafe(piece, start, [i, j], tiles)){
+              console.log(piece + " can be moved")
+              return true
+            }
+          }
+        }
+      }
+    }
+    return false
+  } 
+
+
+  for (var i=0; i<8; i++){
+    for (var j=0; j<8; j++){
+      if (tiles[i][j] && pieceColour(tiles[i][j].pieceName)===colour){
+        var piece = tiles[i][j].pieceName
+        if (piece.startsWith("pawn")){
+          if (pawnMovesLeft(piece, [i, j]))
+            return false
+        }
+        if (piece.startsWith("rook") || piece.startsWith("queen")){
+          if (movesLeft(piece, [i, j], 8, 8, 1, 0) || movesLeft(piece, [i, j], -1, -1, -1, 0) ||
+              movesLeft(piece, [i, j], 8, 8, 0, 1) || movesLeft(piece, [i, j], -1, -1, 0, -1))
+            return false
+        }
+        if (piece.startsWith("knight")){
+          if (knightMovesLeft(piece, [i, j], 1,2) || knightMovesLeft(piece, [i, j], 2,1))
+            return false
+        }
+        if (piece.startsWith("bishop") || piece.startsWith("queen")){
+          if (movesLeft(piece, [i, j], 8, 8, 1, 1) || movesLeft(piece, [i, j], -1, 8, -1, 1) ||
+              movesLeft(piece, [i, j], 8, -1, 1, -1) || movesLeft(piece, [i, j], -1, -1, -1, -1))
+            return false
+        }
+        if (piece.startsWith("king")){
+          if (kingMovesLeft(piece, [i, j]))
+            return false
+        }
+      }
+    }
+  }
+  return true
 }
 
 
@@ -260,6 +367,7 @@ const validMove = (piece, start, end, tiles) => {
     else if (enPassant[2]==="thisMove")
       enPassant = [null, null, "no"]
 
+    
     return true
 
   }
@@ -271,4 +379,4 @@ const Moves = () => {
 }
 
 export default Moves
-export {validMove}
+export {validMove, isCheck, isStalemate}

@@ -2,8 +2,9 @@ import React from 'react'
 import './Chessboard.css'
 import Chesspieces from './Chesspieces'
 import { tiles, ChessPiece } from './Chesspieces'
-import { validMove } from './Moves'
+import { validMove, isCheck, isStalemate } from './Moves'
 import { pawnPromotion } from './PawnPromotionDialog'
+import { showResult } from './ResultDialog'
 
 
 const rows = ["1", "2", "3", "4", "5", "6", "7", "8"]
@@ -24,7 +25,7 @@ const promotePawnTo = (piece, oldPiece, pos) => {
     count++
     document.getElementById("dialog-container").style.visibility="hidden"
     document.getElementById("dialog-container").style.zIndex="3"
-    Chessboard.setNewState()
+    Chessboard.setNewState(piece)
 }
 
 
@@ -51,9 +52,15 @@ const Chessboard = () => {
     //     localStorage.setItem("boardStatus", JSON.stringify(tilesData))
     // }, [turn, tilesData])
 
-    const setNewState = () => {
+    const setNewState = (newPiece) => {
         setTemp((temp+1)%10)
         setTilesData(tiles)
+        if (isStalemate(tiles)){
+            if(isCheck(pieceColour(newPiece)==="w" ? "b" : "w", tiles))
+              showResult("Checkmate", pieceColour(newPiece))
+            else
+              showResult("Stalemate", "d")
+        }
     }
 
     Chessboard.setNewState = setNewState
@@ -87,6 +94,12 @@ const Chessboard = () => {
                 tiles[endX][endY].firstMove = false
                 setTilesData(tiles)
                 pawnPromotion(droppedId, end)
+                if (isStalemate(tiles)){
+                    if(isCheck(pieceColour(droppedId)==="w" ? "b" : "w", tiles))
+                      showResult("Checkmate", pieceColour(droppedId))
+                    else
+                      showResult("Stalemate", "d")
+                }
             }
         }
     }
