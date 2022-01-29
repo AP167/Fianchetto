@@ -1,4 +1,4 @@
-var stockfish = typeof STOCKFISH === "function" ? STOCKFISH() : new Worker('./stockfish.asm.js');
+var stockfish = new Worker('stockfish.asm.js');
 console.log("stockfish initialized");
 function newgame(){
     stockfish.postMessage("uci");
@@ -15,9 +15,10 @@ function predict(movelist){
     console.log("inside predict");
 }
 
-function listen(){
+function listen(stockfishMove){
     var prediction=new Map([['type', ''], ['from', ''], ["to", ""], ["promotion", ""]]);
     stockfish.onmessage=function(event) {
+        var line
         if (event && typeof event === "object") {
             line = event.data;
         } else {
@@ -29,17 +30,19 @@ function listen(){
                 prediction.set('type', 'move');
                 prediction.set('from', match[1]);
                 prediction.set("to" , match[2]);
-                if(match[3]!=undefined)
+                if(match[3]!==undefined)
                     prediction.set("promotion" , match[3]);
-                    move(prediction)
+                    stockfishMove(prediction)
             }
     };
     return prediction;
 }
 
-function quit(){
-    stockfish.postMessage('quit')
-}
-function currentState(){
-stockfish.postMessage("d");
-}
+// function quit(){
+//     stockfish.postMessage('quit')
+// }
+// function currentState(){
+// stockfish.postMessage("d");
+// }
+
+export {listen, predict, newgame}

@@ -16,10 +16,11 @@ const validTilePos = (x, y) => {
   return 0<=x && x<8 && 0<=y && y<8
 }
 
-const pawnMove = (piece, start, end, tiles) => {
+const pawnMove = (piece, start, end, tiles, actualMove) => {
   var x = end[0] - start[0]
   var y = end[1] - start[1]
   var sign = pieceColour(piece)==="w" ? 1 : -1
+
 
   if (x===sign*2 && y===0 && tiles[start[0]][start[1]].firstMove){
     if (tiles[start[0]+sign][start[1]]==null && tiles[end[0]][start[1]]==null){
@@ -30,7 +31,24 @@ const pawnMove = (piece, start, end, tiles) => {
 
   if (x===sign && Math.abs(y)===1){
     if (end[0]===enPassant[0] && end[1]===enPassant[1]){
+
+      var check = false
+      var temp = tiles[end[0]-sign][end[1]]
       tiles[end[0]-sign][end[1]] = null
+      tiles[end[0]][end[1]] = tiles[start[0]][start[1]]
+      tiles[start[0]][start[1]] = null
+
+      check = isCheck(pieceColour(piece), tiles)
+
+      tiles[end[0]-sign][end[1]] = temp
+      tiles[start[0]][start[1]] = tiles[end[0]][end[1]]
+      tiles[end[0]][end[1]] = null
+
+      if (check)
+        return false
+
+      if (actualMove)
+        tiles[end[0]-sign][end[1]] = null
       return true
     }
     if (tiles[end[0]][end[1]])
@@ -226,6 +244,7 @@ const isPositionSafe = (piece, start, end, tiles) => {
 
 
 const isStalemate = (tiles) => {
+  console.log("inside stalemate")
 
   var colour = player
 
@@ -265,7 +284,7 @@ const isStalemate = (tiles) => {
     var sign = colour==="w" ? 1 : -1
     for (var j=start[1]-1; j<=start[1]+1; j++){
       if (validTilePos(start[0]+sign, j) && isPositionSafe(piece, start, [start[0]+sign, j], tiles)){
-        if (pawnMove(piece, start, [start[0]+sign, j], tiles)){
+        if (pawnMove(piece, start, [start[0]+sign, j], tiles, false)){
           console.log(piece + " can be moved")
           return true
         }
@@ -335,7 +354,7 @@ const isStalemate = (tiles) => {
 
 const validPieceMove = (piece, start, end, tiles) => {
   if (piece.startsWith("pawn"))
-    return pawnMove(piece, start, end, tiles)
+    return pawnMove(piece, start, end, tiles, true)
   if (piece.startsWith("rook"))
     return rookMove(start, end, tiles)
   if (piece.startsWith("knight"))
@@ -358,7 +377,7 @@ const validMove = (piece, start, end, tiles) => {
   if (!isPositionSafe(piece, start, end, tiles))
     return false
 
-  // console.log("Position safe : ", true)
+  console.log("Position safe : ", true)
   if (validPieceMove(piece, start, end, tiles)){
     player = player==="w" ? "b" : "w"
 
