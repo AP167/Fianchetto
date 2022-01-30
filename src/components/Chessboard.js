@@ -28,6 +28,8 @@ const stockfishMove = (predictions) => {
     var endPos = predictions.get("to")
     var start = [parseInt(startPos[1])-1, startPos[0].charCodeAt(0)-97]
     var end = [parseInt(endPos[1])-1, endPos[0].charCodeAt(0)-97]
+    var promotion = predictions.get("promotion")
+    var newPiece
     if (tiles[start[0]][start[1]]){
         var piece = tiles[start[0]][start[1]].pId
         console.log(start, end, piece)
@@ -37,7 +39,31 @@ const stockfishMove = (predictions) => {
             tiles[start[0]][start[1]] = null
             tiles[end[0]][end[1]].firstMove = false
 
-            movesList.push(startPos+endPos)
+            if (promotion==="q")
+                newPiece = "queen"
+            else if (promotion==="k")
+                newPiece = "knight"
+            else if (promotion==="b")
+                newPiece = "bishop"
+            else if (promotion==="r")
+                newPiece = "rook"
+            
+            if (promotion!==""){
+                var count
+                if (pieceColour(piece)==="w"){
+                    count = promotedCountW.toString()
+                    promotedCountW = (promotedCountW+1)%10
+                } else {
+                    count = promotedCountB.toString()
+                    promotedCountB = (promotedCountB+1)%10
+                }
+
+                tiles[end[0]][end[1]] = new ChessPiece(`${newPiece}_${pieceColour(piece)}`, count, end[0], end[1])
+            }
+            
+                
+
+            movesList.push(startPos+endPos+promotion)
             console.log(movesList)
 
             Chessboard.setOpponentState(piece)
@@ -156,7 +182,7 @@ const Chessboard = () => {
 
         
 
-        if (turn!==opponent && validMove(droppedId, start, end, tiles))
+        if (getPlayer()!==opponent && validMove(droppedId, start, end, tiles))
         {
             if (droppedAtId.startsWith("tile") || pieceColour(droppedId) !== pieceColour(droppedAtId)){
                 setTurn(turn==="w" ? "b" : "w")
@@ -192,7 +218,6 @@ const Chessboard = () => {
     return (
     <>
         {`${turn==="w" ? "White" : "Black"}'s turn`}{temp===11 ? "!" : ""}
-        <div id="dialog-box"></div>
         <div className="board" id="board">
             {(rows.reverse()).map((row, I) => {
                 const i = 7-I
