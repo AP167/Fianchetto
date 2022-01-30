@@ -1,6 +1,6 @@
 import React from 'react'
 import { pieceColour } from './Chessboard'
-import { tiles } from './Chesspieces'
+// import { tiles } from './Chesspieces'
 
 var player = "w"
 
@@ -9,6 +9,10 @@ var kW = [0, 4]
 var kB = [7, 4]
 
 const getPlayer = () => player
+
+const setPlayer = () => {
+  player = "w"
+}
 
 const validPlayer = (piece) => {
   return pieceColour(piece)===player
@@ -108,7 +112,7 @@ const queenMove = (start, end, tiles) => {
   return rookMove(start, end, tiles) || bishopMove(start,end, tiles)
 }
 
-const kingMove = (piece, start, end) => {
+const kingMove = (piece, start, end, tiles) => {
   var colour = pieceColour(piece)
   if (Math.abs(end[0]-start[0])<=1 && Math.abs(end[1]-start[1])<=1){
     if (colour==="w"){
@@ -364,7 +368,7 @@ const validPieceMove = (piece, start, end, tiles) => {
   if (piece.startsWith("queen"))
     return queenMove(start, end, tiles)
   if (piece.startsWith("king"))
-    return kingMove(piece, start, end)
+    return kingMove(piece, start, end, tiles)
   return false
 }
 
@@ -398,4 +402,4 @@ const Moves = () => {
 }
 
 export default Moves
-export {validMove, isCheck, isStalemate, getPlayer}
+export {validMove, isCheck, isStalemate, getPlayer, setPlayer}

@@ -14,26 +14,28 @@ class ChessPiece{
 }
 
 //initializing the board
-var tiles = new Array(8)
-for (var i = 0; i<8; i++){
-    tiles[i] = new Array(8)
-    for (var j=0; j<8; j++){
-        if (i===1)
-            tiles[i][j] = new ChessPiece("pawn_w", (j+1).toString(), i, j)
-        else if (i===6)
-            tiles[6][j] = new ChessPiece("pawn_b", (j+1).toString(), i, j)
-        else if ((i===0 || i===7) && (j===0 || j===7))
-            tiles[i][j] = new ChessPiece(i===0 ? "rook_w": "rook_b", j===0 ? "1" : "2", i, j)
-        else if ((i===0 || i===7) && (j===1 || j===6))
-            tiles[i][j] = new ChessPiece(i===0 ? "knight_w": "knight_b", j===1 ? "1" : "2", i, j)
-        else if ((i===0 || i===7) && (j===2 || j===5))
-            tiles[i][j] = new ChessPiece(i===0 ? "bishop_w": "bishop_b", j===2 ? "1" : "2", i, j)
-        else if ((i===0 || i===7) && (j===3))
-            tiles[i][j] = new ChessPiece(i===0 ? "queen_w": "queen_b", "", i, j)
-        else if ((i===0 || i===7) && (j===4))
-            tiles[i][j] = new ChessPiece(i===0 ? "king_w": "king_b", "", i, j)
-        else
-            tiles[i][j] = null
+const initializeBoard = (tiles) => {
+    // var tiles = new Array(8)
+    for (var i = 0; i<8; i++){
+        // tiles[i] = new Array(8)
+        for (var j=0; j<8; j++){
+            if (i===1)
+                tiles[i][j] = new ChessPiece("pawn_w", (j+1).toString(), i, j)
+            else if (i===6)
+                tiles[6][j] = new ChessPiece("pawn_b", (j+1).toString(), i, j)
+            else if ((i===0 || i===7) && (j===0 || j===7))
+                tiles[i][j] = new ChessPiece(i===0 ? "rook_w": "rook_b", j===0 ? "1" : "2", i, j)
+            else if ((i===0 || i===7) && (j===1 || j===6))
+                tiles[i][j] = new ChessPiece(i===0 ? "knight_w": "knight_b", j===1 ? "1" : "2", i, j)
+            else if ((i===0 || i===7) && (j===2 || j===5))
+                tiles[i][j] = new ChessPiece(i===0 ? "bishop_w": "bishop_b", j===2 ? "1" : "2", i, j)
+            else if ((i===0 || i===7) && (j===3))
+                tiles[i][j] = new ChessPiece(i===0 ? "queen_w": "queen_b", "", i, j)
+            else if ((i===0 || i===7) && (j===4))
+                tiles[i][j] = new ChessPiece(i===0 ? "king_w": "king_b", "", i, j)
+            else
+                tiles[i][j] = null
+        }
     }
 }
 
@@ -53,4 +55,4 @@ const Chesspieces = (props) => {
 }
 
 export default Chesspieces
-export {tiles, ChessPiece}
+export {initializeBoard, ChessPiece}
