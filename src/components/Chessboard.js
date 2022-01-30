@@ -79,6 +79,11 @@ engine.newgame()
 engine.listen(stockfishMove)
 
 
+const startNewGame = (event) => {
+    event.preventDefault()
+    console.log("new game started")
+}
+
 
 
 const pieceColour = (piece) => {
@@ -217,7 +222,11 @@ const Chessboard = () => {
 
     return (
     <>
-        {`${turn==="w" ? "White" : "Black"}'s turn`}{temp===11 ? "!" : ""}
+        <button className="newgame-btn" onClick={(event) => startNewGame(event)}>New Game</button>
+        <div className="board-container">
+        <h3 className="player-turn">
+            {`${turn==="w" ? "White" : "Black"}'s turn`}{temp===11 ? "!" : ""}
+        </h3>
         <div className="board" id="board">
             {(rows.reverse()).map((row, I) => {
                 const i = 7-I
@@ -229,6 +238,8 @@ const Chessboard = () => {
                                 onDragOver={(event) => allowDrop(event)}
                                 onDrop={(event) => drop(event)}
                                 id={`tile${i}${j}`} >
+                                <span className="rank">{j===0 ? rows[i] : ""}</span>
+                                <span className="file">{i===0 ? columns[j] : ""}</span>
                                 <Chesspieces 
                                     i={i} 
                                     j={j} 
@@ -243,6 +254,7 @@ const Chessboard = () => {
                     </>
                 )
             })}
+        </div>
         </div>
     </>
     )

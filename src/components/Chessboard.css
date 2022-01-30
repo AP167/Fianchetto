@@ -1,6 +1,24 @@
+.board-container{
+    height: 85vh;
+    width: 85vh;
+    display: grid;
+    place-content: center;
+    background-color: rgb(102, 89, 71);
+    border-radius: 5px;
+}
+
+.player-turn{
+    text-align: center;
+    margin: 2px;
+    padding: 0px;
+    font-size: 2vh;
+    color: rgb(53, 45, 37);
+}
+
 .board{
     height: 80vh;
     width: 80vh;
+    margin-bottom: 3vh;
     display: grid;
     grid-template-rows: repeat(8, 10vh);
     grid-template-columns: repeat(8, 10vh);
@@ -21,4 +39,38 @@
 .tile{
     display: grid;
     place-content: center;
+    position: relative;
+}
+
+.rank{
+    position: absolute;
+    left: -2vh;
+    top: 3vh;
+    font-size: 2vh;
+    color: rgb(53, 45, 37);
+}
+
+.file{
+    position: absolute;
+    bottom: -2.2vh;
+    left: 5vh;
+    font-size: 2vh;
+    color: rgb(53, 45, 37);
+}
+
+.newgame-btn{
+    position: fixed;
+    right: 3vh;
+    top: 3vh;
+    margin: 2vh;
+    width: 10vw;
+    padding: 2vh;
+    text-align: center;
+    background-color: rgb(139, 111, 76);
+    border: 2px solid rgb(71, 54, 38);
+    border-radius: 2px;
+}
+
+.newgame-btn:hover{
+    background-color: rgb(153, 117, 73);
 }
