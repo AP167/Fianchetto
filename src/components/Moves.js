@@ -406,7 +406,7 @@ const validMove = (piece, start, end, tiles) => {
       noCapture = 0
     else
       noCapture++
-    console.log("NoCapture", noCapture)
+    // console.log("NoCapture", noCapture)
     
     return true
 

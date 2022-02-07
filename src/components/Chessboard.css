@@ -58,10 +58,8 @@
     color: rgb(53, 45, 37);
 }
 
-.newgame-btn{
+.game-btn{
     position: fixed;
-    right: 3vh;
-    top: 3vh;
     margin: 2vh;
     width: 10vw;
     padding: 2vh;
@@ -71,6 +69,16 @@
     border-radius: 2px;
 }
 
-.newgame-btn:hover{
+.game-btn:hover{
     background-color: rgb(153, 117, 73);
+}
+
+#newgame-btn{
+    right: 3vh;
+    top: 3vh;
+}
+
+#draw-btn{
+    right: 3vh;
+    top: 12vh;
 }

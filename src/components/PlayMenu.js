@@ -4,17 +4,17 @@ import './PlayMenu.css'
 
 const play1 = (event) => {
     event.preventDefault()
-    setOpponent("b")
+    setOpponent("b", "s")
 }
 
 const play2 = (event) => {
     event.preventDefault()
-    setOpponent("")
+    setOpponent("", "m")
 }
 
 const play3 = (event) => {
     event.preventDefault()
-    setOpponent("")
+    setOpponent("", "y")
 }
 
 const PlayMenu = () => {

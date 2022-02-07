@@ -2,13 +2,14 @@ import React from 'react'
 import './Chessboard.css'
 import Chesspieces from './Chesspieces'
 import { initializeBoard, ChessPiece } from './Chesspieces'
-import { validMove, isCheck, isStalemate, getPlayer, resetState } from './Moves'
+import { validMove, isCheck, isStalemate, getPlayer, resetState, getNoCapture } from './Moves'
 import { pawnPromotion } from './PawnPromotionDialog'
 import { showResult } from './ResultDialog'
 import * as engine from '../Engine/myEngine'
 
 
 const rows = ["1", "2", "3", "4", "5", "6", "7", "8"]
+const reverseRows = ["8", "7", "6", "5", "4", "3", "2", "1"]
 const columns = ["a", "b", "c", "d", "e", "f", "g", "h"]
 
 var tiles = new Array(8)
@@ -22,6 +23,7 @@ var movesList = []
 
 var promotedCountW = 3, promotedCountB = 3
 var opponent = "b"
+var gameMode = "s"
 var gameStarted = true
 
 // const getLocalData = () => {
@@ -40,8 +42,9 @@ var gameStarted = true
 
 
 
-const setOpponent = (opp) => {
+const setOpponent = (opp, mode) => {
     opponent = opp
+    gameMode = mode
     document.getElementById("play-menu").style.visibility="hidden"
     document.getElementById("play-menu").style.zIndex="-5"
 }
@@ -193,6 +196,10 @@ const Chessboard = () => {
         document.getElementById("play-menu").style.zIndex="5"
     }
 
+    const checkDraw = (event) => {
+        console.log(getNoCapture())
+    }
+
     const allowDrop = (event) => {
         event.preventDefault()
     }
@@ -213,7 +220,7 @@ const Chessboard = () => {
         var start = [startX, startY]
         var end = [endX, endY]
 
-        
+        console.log("Mode", gameMode)
 
         if (getPlayer()!==opponent && validMove(droppedId, start, end, tiles))
         {
@@ -252,13 +259,18 @@ const Chessboard = () => {
 
     return (
     <>
-        <button className="newgame-btn" onClick={(event) => startNewGame(event)}>New Game</button>
+        <button className="game-btn" id="newgame-btn" onClick={(event) => startNewGame(event)}>
+            New Game
+        </button>
+        <button className="game-btn" id="draw-btn" onClick={(event) => checkDraw(event)}>
+            {getNoCapture()>=49 ? "Claim" : "Offer"} Draw
+        </button>
         <div className="board-container">
         <h3 className="player-turn">
             {`${turn==="w" ? "White" : "Black"}'s turn`}{temp===11 ? "!" : ""}
         </h3>
         <div className="board" id="board">
-            {(rows.reverse()).map((row, I) => {
+            {reverseRows.map((row, I) => {
                 const i = 7-I
                 return (
                     <>
