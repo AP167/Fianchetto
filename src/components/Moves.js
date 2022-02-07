@@ -2,9 +2,9 @@ import React from 'react'
 import { pieceColour } from './Chessboard'
 // import { tiles } from './Chesspieces'
 
-var moveAudio = new Audio('/assets/sound/Move1.mp3')
-var castlleAudio = new Audio('/assets/sound/Castling1.mp3')
-var captureAudio = new Audio('/assets/sound/Capture1.mp3')
+var moveAudio = new Audio('/assets/sound/Move.mp3')
+var castlleAudio = new Audio('/assets/sound/Castling.mp3')
+var captureAudio = new Audio('/assets/sound/Capture.mp3')
 
 
 var player = "w"

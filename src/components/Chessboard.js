@@ -8,9 +8,9 @@ import { pawnPromotion } from './PawnPromotionDialog'
 import { showResult } from './ResultDialog'
 import * as engine from '../Engine/myEngine'
 
-// var checkAudio = new Audio('/assets/sound/Check1.mp3')
-// var checkmateAudio = new Audio('/assets/sound/Checkmate1.mp3')
-// var stalemateAudio = new Audio('/assets/sound/Stalemate1.mp3')
+var checkAudio = new Audio('/assets/sound/Check.mp3')
+var checkmateAudio = new Audio('/assets/sound/Checkmate.mp3')
+var stalemateAudio = new Audio('/assets/sound/Stalemate.mp3')
 
 
 const rows = ["1", "2", "3", "4", "5", "6", "7", "8"]
@@ -173,10 +173,11 @@ const Chessboard = () => {
         setTemp((temp+1)%10)
         setTilesData(tiles)
         if (isStalemate(tiles)){
-            if(isCheck(pieceColour(newPiece)==="w" ? "b" : "w", tiles))
+            if(isCheck(pieceColour(newPiece)==="w" ? "b" : "w", tiles)){
               showResult("Checkmate", pieceColour(newPiece))
-            else
+            } else {
               showResult("Stalemate", "d")
+            }
         }
     }
 
@@ -269,10 +270,18 @@ const Chessboard = () => {
                 console.log("repeated", boardRepetition)
 
                 if (isStalemate(tiles)){
-                    if(isCheck(pieceColour(droppedId)==="w" ? "b" : "w", tiles))
-                      showResult("Checkmate", pieceColour(droppedId))
-                    else
-                      showResult("Stalemate", "d")
+                    if(isCheck(pieceColour(droppedId)==="w" ? "b" : "w", tiles)){
+                        setTimeout(() => {checkmateAudio.play()}, 200)
+                        showResult("Checkmate", pieceColour(droppedId))
+                    } else {
+                        setTimeout(() => {stalemateAudio.play()}, 200)
+                        showResult("Stalemate", "d")
+                    }
+                } else {
+                    if(isCheck(pieceColour(droppedId)==="w" ? "b" : "w", tiles)){
+                        setTimeout(() => {checkAudio.play()}, 200)
+                        console.log("Check")
+                    }
                 }
                 if (getPlayer()===opponent){
                     console.log("opponents turn")
