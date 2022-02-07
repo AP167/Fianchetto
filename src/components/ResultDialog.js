@@ -1,6 +1,8 @@
 import React from 'react'
 import './ResultDialog.css'
 
+var gameOverAudio = new Audio('/assets/sound/GameOver.mp3')
+
 const showResult = (newGameStatus, newWinner) => {
     document.getElementById("result-container").style.visibility="visible"
     document.getElementById("result-container").style.zIndex="3"
@@ -9,6 +11,9 @@ const showResult = (newGameStatus, newWinner) => {
         win = "White has won!"
     else if (newWinner==="b")
         win = "Black has won!"
+
+    if (newGameStatus!=="Stalemate" && newWinner==="d")
+        setTimeout(() => {gameOverAudio.play()}, 200)
     ResultDialog.setResult(newGameStatus, win)
 }
 

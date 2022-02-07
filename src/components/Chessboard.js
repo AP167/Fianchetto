@@ -8,6 +8,7 @@ import { pawnPromotion } from './PawnPromotionDialog'
 import { showResult } from './ResultDialog'
 import * as engine from '../Engine/myEngine'
 
+// var gameStartAudio = new Audio('/assets/sound/GameStart.mp3')
 var checkAudio = new Audio('/assets/sound/Check.mp3')
 var checkmateAudio = new Audio('/assets/sound/Checkmate.mp3')
 var stalemateAudio = new Audio('/assets/sound/Stalemate.mp3')
@@ -53,6 +54,7 @@ const setOpponent = (opp, mode) => {
     gameMode = mode
     document.getElementById("play-menu").style.visibility="hidden"
     document.getElementById("play-menu").style.zIndex="-5"
+    // setTimeout(() => {gameStartAudio.play()}, 200)
 }
 
 const stockfishMove = (predictions) => {
@@ -104,7 +106,7 @@ const stockfishMove = (predictions) => {
                 boardRepetition = boardRepeated()
                 console.log("repeated", boardRepetition)
 
-                Chessboard.setOpponentState(piece)
+                Chessboard.setStockfishState(piece)
 
             } else {
                 engine.predict(movesList)
@@ -169,36 +171,70 @@ const Chessboard = () => {
     //     localStorage.setItem("boardStatus", JSON.stringify(tilesData))
     // }, [turn, tilesData])
 
-    const setNewState = (newPiece) => {
-        setTemp((temp+1)%10)
-        setTilesData(tiles)
+    const currCheckStatus = (piece) => {
         if (isStalemate(tiles)){
-            if(isCheck(pieceColour(newPiece)==="w" ? "b" : "w", tiles)){
-              showResult("Checkmate", pieceColour(newPiece))
+            if(isCheck(pieceColour(piece)==="w" ? "b" : "w", tiles)){
+                setTimeout(() => {checkmateAudio.play()}, 200)
+                showResult("Checkmate", pieceColour(piece))
             } else {
-              showResult("Stalemate", "d")
+                setTimeout(() => {stalemateAudio.play()}, 200)
+                showResult("Stalemate", "d")
+            }
+        } else {
+            if(isCheck(pieceColour(piece)==="w" ? "b" : "w", tiles)){
+                setTimeout(() => {checkAudio.play()}, 300)
+                console.log("Check")
             }
         }
     }
 
+    const setNewState = (newPiece) => {
+        setTemp((temp+1)%10)
+        setTilesData(tiles)
+        currCheckStatus(newPiece)
+        // if (isStalemate(tiles)){
+        //     if(isCheck(pieceColour(newPiece)==="w" ? "b" : "w", tiles)){
+        //         setTimeout(() => {checkmateAudio.play()}, 200)
+        //         showResult("Checkmate", pieceColour(newPiece))
+        //     } else {
+        //         setTimeout(() => {stalemateAudio.play()}, 200)
+        //         showResult("Stalemate", "d")
+        //     }
+        // } else {
+        //     if(isCheck(pieceColour(newPiece)==="w" ? "b" : "w", tiles)){
+        //         setTimeout(() => {checkAudio.play()}, 200)
+        //         console.log("Check")
+        //     }
+        // }
+    }
+
     Chessboard.setNewState = setNewState
 
-    const setOpponentState = (newPiece) => {
+    const setStockfishState = (newPiece) => {
         setTurn(turn==="w" ? "b" : "w")
         setTilesData(tiles)
-        if (isStalemate(tiles)){
-            if(isCheck(pieceColour(newPiece)==="w" ? "b" : "w", tiles))
-              showResult("Checkmate", pieceColour(newPiece))
-            else
-              showResult("Stalemate", "d")
-        }
+        currCheckStatus(newPiece)
+        // if (isStalemate(tiles)){
+        //     if(isCheck(pieceColour(newPiece)==="w" ? "b" : "w", tiles)){
+        //         setTimeout(() => {checkmateAudio.play()}, 200)
+        //         showResult("Checkmate", pieceColour(newPiece))
+        //     } else {
+        //         setTimeout(() => {stalemateAudio.play()}, 200)
+        //         showResult("Stalemate", "d")
+        //     }
+        // } else {
+        //     if(isCheck(pieceColour(newPiece)==="w" ? "b" : "w", tiles)){
+        //         setTimeout(() => {checkAudio.play()}, 200)
+        //         console.log("Check")
+        //     }
+        // }
         if (getPlayer()===opponent){
             console.log("opponents turn")
             engine.predict(movesList)
         }
     }
 
-    Chessboard.setOpponentState = setOpponentState
+    Chessboard.setStockfishState = setStockfishState
 
     const startNewGame = (event) => {
         event.preventDefault()
@@ -269,20 +305,21 @@ const Chessboard = () => {
                 boardRepetition = boardRepeated()
                 console.log("repeated", boardRepetition)
 
-                if (isStalemate(tiles)){
-                    if(isCheck(pieceColour(droppedId)==="w" ? "b" : "w", tiles)){
-                        setTimeout(() => {checkmateAudio.play()}, 200)
-                        showResult("Checkmate", pieceColour(droppedId))
-                    } else {
-                        setTimeout(() => {stalemateAudio.play()}, 200)
-                        showResult("Stalemate", "d")
-                    }
-                } else {
-                    if(isCheck(pieceColour(droppedId)==="w" ? "b" : "w", tiles)){
-                        setTimeout(() => {checkAudio.play()}, 200)
-                        console.log("Check")
-                    }
-                }
+                currCheckStatus(droppedId)
+                // if (isStalemate(tiles)){
+                //     if(isCheck(pieceColour(droppedId)==="w" ? "b" : "w", tiles)){
+                //         setTimeout(() => {checkmateAudio.play()}, 200)
+                //         showResult("Checkmate", pieceColour(droppedId))
+                //     } else {
+                //         setTimeout(() => {stalemateAudio.play()}, 200)
+                //         showResult("Stalemate", "d")
+                //     }
+                // } else {
+                //     if(isCheck(pieceColour(droppedId)==="w" ? "b" : "w", tiles)){
+                //         setTimeout(() => {checkAudio.play()}, 200)
+                //         console.log("Check")
+                //     }
+                // }
                 if (getPlayer()===opponent){
                     console.log("opponents turn")
                     engine.predict(movesList)
