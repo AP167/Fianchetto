@@ -67,6 +67,7 @@
     background-color: rgb(139, 111, 76);
     border: 2px solid rgb(71, 54, 38);
     border-radius: 2px;
+    cursor: pointer;
 }
 
 .game-btn:hover{

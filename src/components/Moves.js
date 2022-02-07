@@ -2,6 +2,11 @@ import React from 'react'
 import { pieceColour } from './Chessboard'
 // import { tiles } from './Chesspieces'
 
+var moveAudio = new Audio('/assets/sound/Move1.mp3')
+var castlleAudio = new Audio('/assets/sound/Castling1.mp3')
+var captureAudio = new Audio('/assets/sound/Capture1.mp3')
+
+
 var player = "w"
 
 var enPassant = [null, null, "no"]
@@ -9,6 +14,7 @@ var kW = [0, 4]
 var kB = [7, 4]
 
 var noCapture = 0
+var castleMove = false
 
 const resetState = () => {
   player = "w"
@@ -154,6 +160,7 @@ const kingMove = (piece, start, end, tiles) => {
     } else {
       kB = end
     }
+    castleMove = true
     return true
   } 
 
@@ -407,7 +414,16 @@ const validMove = (piece, start, end, tiles) => {
     else
       noCapture++
     // console.log("NoCapture", noCapture)
+    if (tiles[end[0]][end[1]]){
+      captureAudio.play()
+    } else if (castleMove){
+      castleMove = false
+      castlleAudio.play()
+    } else {
+      moveAudio.play()
+    }
     
+    moveAudio.play()
     return true
 
   }

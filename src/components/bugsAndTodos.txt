@@ -20,18 +20,24 @@ En passant  ✅
 Check  ✅ 
 Checkmate  ✅
 Stalemate  ✅
-50 move rule
-75 move rule
+50 move rule  ✅
+75 move rule  ✅
+3 fold repetition  ✅
+5 fold repetition  ✅
+
+
+The game can be still continued after draw, disable draggable property after result window
+is shown.
 
 The pawn doesn't change immediately after promotion. Find a way to call setTiles after changing
 tiles value.  ✅
 
-If the pieces in a row are rook_b...pawn_w pawn_b...king_w and pawn_w captures pawn_b by en passant,
-it will be taken as a valid move even if the king is getting exposed to the rook. Put 
-isPositionSafe() checks for en passant.  ✅
+If the pieces in a row are rook_b...pawn_w pawn_b...king_w and pawn_w captures pawn_b by 
+en passant, it will be taken as a valid move even if the king is getting exposed to the rook. 
+Put isPositionSafe() checks for en passant.  ✅
 
-Name the promoted pawns based on colour, otherwise the id can exceed 9 and pieceColour() works only
-for ids having single digit numbers.  ✅
+Name the promoted pawns based on colour, otherwise the id can exceed 9 and pieceColour() works 
+only for ids having single digit numbers.  ✅
 
 
 Use useState for tile data. ✅

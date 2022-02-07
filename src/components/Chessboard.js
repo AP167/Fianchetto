@@ -3,9 +3,14 @@ import './Chessboard.css'
 import Chesspieces from './Chesspieces'
 import { initializeBoard, ChessPiece } from './Chesspieces'
 import { validMove, isCheck, isStalemate, getPlayer, resetState, getNoCapture } from './Moves'
+import {resetBoardStatus, storeBoardStatus, boardRepeated, popBoardStatus} from './StoreBoardStatus'
 import { pawnPromotion } from './PawnPromotionDialog'
 import { showResult } from './ResultDialog'
 import * as engine from '../Engine/myEngine'
+
+// var checkAudio = new Audio('/assets/sound/Check1.mp3')
+// var checkmateAudio = new Audio('/assets/sound/Checkmate1.mp3')
+// var stalemateAudio = new Audio('/assets/sound/Stalemate1.mp3')
 
 
 const rows = ["1", "2", "3", "4", "5", "6", "7", "8"]
@@ -17,7 +22,7 @@ for (var i = 0; i<8; i++){
     tiles[i] = new Array(8)
 }
 
-initializeBoard(tiles)
+
 
 var movesList = []
 
@@ -25,6 +30,7 @@ var promotedCountW = 3, promotedCountB = 3
 var opponent = "b"
 var gameMode = "s"
 var gameStarted = true
+var boardRepetition = 1
 
 // const getLocalData = () => {
 //     const lists = localStorage.getItem("boardStatus")
@@ -94,6 +100,10 @@ const stockfishMove = (predictions) => {
                 movesList.push(startPos+endPos+promotion)
                 console.log(movesList)
 
+                storeBoardStatus(tiles)
+                boardRepetition = boardRepeated()
+                console.log("repeated", boardRepetition)
+
                 Chessboard.setOpponentState(piece)
 
             } else {
@@ -133,12 +143,20 @@ const promotePawnTo = (piece, oldPiece, pos) => {
     movesList[movesList.length - 1] = movesList[movesList.length - 1] + piece[0]
     console.log(movesList)
 
+    popBoardStatus()
+    storeBoardStatus(tiles)
+
     document.getElementById("dialog-container").style.visibility="hidden"
     document.getElementById("dialog-container").style.zIndex="-3"
 
     Chessboard.setNewState(piece)
 
 }
+
+
+
+initializeBoard(tiles)
+storeBoardStatus(tiles)
 
 
 
@@ -192,12 +210,19 @@ const Chessboard = () => {
         setTilesData(tiles)
         movesList = []
         resetState()
+        resetBoardStatus()
+        storeBoardStatus(tiles)
         document.getElementById("play-menu").style.visibility="visible"
         document.getElementById("play-menu").style.zIndex="5"
     }
 
     const checkDraw = (event) => {
-        console.log(getNoCapture())
+        if (getNoCapture()>=49)
+            showResult("Fifty move Rule", "d")
+        else if(boardRepetition>=3)
+            showResult("Threefold Repetition", "d")
+        else
+            showResult("Draw by mutual agreement", "d")
     }
 
     const allowDrop = (event) => {
@@ -239,6 +264,10 @@ const Chessboard = () => {
 
                 pawnPromotion(droppedId, end)
 
+                storeBoardStatus(tiles)
+                boardRepetition = boardRepeated()
+                console.log("repeated", boardRepetition)
+
                 if (isStalemate(tiles)){
                     if(isCheck(pieceColour(droppedId)==="w" ? "b" : "w", tiles))
                       showResult("Checkmate", pieceColour(droppedId))
@@ -249,6 +278,10 @@ const Chessboard = () => {
                     console.log("opponents turn")
                     engine.predict(movesList)
                 }
+                if (boardRepeated()===5)
+                    showResult("Fivefold Repetition", "d")
+                if (getNoCapture()===75)
+                    showResult("Seventy-five move rule", "d")
             }
         }
     }
@@ -263,7 +296,7 @@ const Chessboard = () => {
             New Game
         </button>
         <button className="game-btn" id="draw-btn" onClick={(event) => checkDraw(event)}>
-            {getNoCapture()>=49 ? "Claim" : "Offer"} Draw
+            {getNoCapture()>=49 || boardRepetition>=3 ? "Claim" : "Offer"} Draw
         </button>
         <div className="board-container">
         <h3 className="player-turn">
