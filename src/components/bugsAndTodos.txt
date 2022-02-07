@@ -20,6 +20,8 @@ En passant  ✅
 Check  ✅ 
 Checkmate  ✅
 Stalemate  ✅
+50 move rule
+75 move rule
 
 The pawn doesn't change immediately after promotion. Find a way to call setTiles after changing
 tiles value.  ✅

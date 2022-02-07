@@ -8,11 +8,20 @@ var enPassant = [null, null, "no"]
 var kW = [0, 4]
 var kB = [7, 4]
 
+var noCapture = 0
+
+const resetState = () => {
+  player = "w"
+  enPassant = [null, null, "no"]
+  kW = [0, 4]
+  kB = [7, 4]
+  noCapture = 0
+}
+
+const getNoCapture = () => noCapture
+
 const getPlayer = () => player
 
-const setPlayer = () => {
-  player = "w"
-}
 
 const validPlayer = (piece) => {
   return pieceColour(piece)===player
@@ -250,6 +259,8 @@ const isPositionSafe = (piece, start, end, tiles) => {
 
 const isStalemate = (tiles) => {
 
+  console.log(tiles)
+
   var colour = player
 
   const movesLeft = (piece, start, endI, endJ, stepI, stepJ) => {
@@ -390,6 +401,12 @@ const validMove = (piece, start, end, tiles) => {
     else if (enPassant[2]==="thisMove")
       enPassant = [null, null, "no"]
 
+
+    if (tiles[end[0]][end[1]] || piece.startsWith("pawn"))
+      noCapture = 0
+    else
+      noCapture++
+    console.log("NoCapture", noCapture)
     
     return true
 
@@ -402,4 +419,4 @@ const Moves = () => {
 }
 
 export default Moves
-export {validMove, isCheck, isStalemate, getPlayer, setPlayer}
+export {validMove, isCheck, isStalemate, getPlayer, getNoCapture, resetState}

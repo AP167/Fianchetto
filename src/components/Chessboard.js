@@ -2,7 +2,7 @@ import React from 'react'
 import './Chessboard.css'
 import Chesspieces from './Chesspieces'
 import { initializeBoard, ChessPiece } from './Chesspieces'
-import { validMove, isCheck, isStalemate, getPlayer, setPlayer } from './Moves'
+import { validMove, isCheck, isStalemate, getPlayer, resetState } from './Moves'
 import { pawnPromotion } from './PawnPromotionDialog'
 import { showResult } from './ResultDialog'
 import * as engine from '../Engine/myEngine'
@@ -23,6 +23,22 @@ var movesList = []
 var promotedCountW = 3, promotedCountB = 3
 var opponent = "b"
 var gameStarted = true
+
+// const getLocalData = () => {
+//     const lists = localStorage.getItem("boardStatus")
+//     if (lists){
+//         var oldData =  JSON.parse(lists)
+//         for (var i=0; i<8; i++){
+//             for (var j=0; j<8; j++){
+//                 tiles[i][j]=oldData[i][j]
+//             }
+//         }
+//     }
+// }
+
+// getLocalData()
+
+
 
 const setOpponent = (opp) => {
     opponent = opp
@@ -122,22 +138,9 @@ const promotePawnTo = (piece, oldPiece, pos) => {
 }
 
 
-// const getLocalData = () => {
-//     const lists = localStorage.getItem("boardStatus")
-//     if (lists){
-//         var oldData =  JSON.parse(lists)
-//         for (var i=0; i<8; i++){
-//             for (var j=0; j<8; j++){
-//                 tiles[i][j]=oldData[i][j]
-//             }
-//         }
-//     }
-// }
-
 
 const Chessboard = () => {
 
-    // getLocalData()
     const [turn, setTurn] = React.useState("w")
     const [temp, setTemp] = React.useState(0)
     const [tilesData, setTilesData] = React.useState(tiles)
@@ -185,7 +188,7 @@ const Chessboard = () => {
         setTurn("w")
         setTilesData(tiles)
         movesList = []
-        setPlayer()
+        resetState()
         document.getElementById("play-menu").style.visibility="visible"
         document.getElementById("play-menu").style.zIndex="5"
     }
