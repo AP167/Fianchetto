@@ -7,11 +7,14 @@ import {resetBoardStatus, storeBoardStatus, boardRepeated, popBoardStatus} from 
 import { pawnPromotion } from './PawnPromotionDialog'
 import { showResult } from './ResultDialog'
 import * as engine from '../Engine/myEngine'
+import Controls from './Controls'
+import { getSoundOn, getHighlightOn } from './Controls'
 
 // var gameStartAudio = new Audio('/assets/sound/GameStart.mp3')
 var checkAudio = new Audio('/assets/sound/Check.mp3')
 var checkmateAudio = new Audio('/assets/sound/Checkmate.mp3')
 var stalemateAudio = new Audio('/assets/sound/Stalemate.mp3')
+
 
 
 const rows = ["1", "2", "3", "4", "5", "6", "7", "8"]
@@ -32,6 +35,9 @@ var opponent = "b"
 var gameMode = "s"
 var gameStarted = true
 var boardRepetition = 1
+
+var origTileColour = [null, null, null, null]
+
 
 // const getLocalData = () => {
 //     const lists = localStorage.getItem("boardStatus")
@@ -54,6 +60,8 @@ const setOpponent = (opp, mode) => {
     gameMode = mode
     document.getElementById("play-menu").style.visibility="hidden"
     document.getElementById("play-menu").style.zIndex="-5"
+    document.getElementById("highlight-switch").checked = getHighlightOn()
+    document.getElementById("sound-switch").checked = getSoundOn()
     // setTimeout(() => {gameStartAudio.play()}, 200)
 }
 
@@ -106,6 +114,8 @@ const stockfishMove = (predictions) => {
                 boardRepetition = boardRepeated()
                 console.log("repeated", boardRepetition)
 
+                highlightTiles("tile"+start[0].toString()+start[1].toString(), "tile"+end[0].toString()+end[1].toString())
+
                 Chessboard.setStockfishState(piece)
 
             } else {
@@ -157,6 +167,37 @@ const promotePawnTo = (piece, oldPiece, pos) => {
 
 
 
+
+
+const highlightTiles = (startTile, endTile) => {
+    resetTileColour()
+    if (getHighlightOn()){
+        var newStartTile = document.getElementById(startTile)
+        var newEndTile = document.getElementById(endTile)
+        origTileColour = [startTile, endTile, newStartTile.style.backgroundColor, newEndTile.style.backgroundColor]
+        console.log("tiles", startTile, endTile)
+        if ((parseInt(startTile[4])+parseInt(startTile[5]))%2===0)
+            newStartTile.style.backgroundColor = "rgb(205, 220, 140)"
+        else
+            newStartTile.style.backgroundColor = "rgb(180, 194, 112)"
+        if ((parseInt(endTile[4])+parseInt(endTile[5]))%2===0)
+            newEndTile.style.backgroundColor = "rgb(205, 220, 140)"
+        else
+            newEndTile.style.backgroundColor = "rgb(180, 194, 112)"
+    }
+}
+
+const resetTileColour = () => {
+    if (origTileColour[0]!==null){
+        var oldStartTile = document.getElementById(origTileColour[0])
+        var oldEndTile = document.getElementById(origTileColour[1])
+        oldStartTile.style.backgroundColor = origTileColour[2]
+        oldEndTile.style.backgroundColor = origTileColour[3]
+    }
+    origTileColour = [null, null, null, null]
+}
+
+
 initializeBoard(tiles)
 storeBoardStatus(tiles)
 
@@ -174,15 +215,18 @@ const Chessboard = () => {
     const currCheckStatus = (piece) => {
         if (isStalemate(tiles)){
             if(isCheck(pieceColour(piece)==="w" ? "b" : "w", tiles)){
-                setTimeout(() => {checkmateAudio.play()}, 200)
+                if (getSoundOn())
+                    setTimeout(() => {checkmateAudio.play()}, 200)
                 showResult("Checkmate", pieceColour(piece))
             } else {
-                setTimeout(() => {stalemateAudio.play()}, 200)
+                if (getSoundOn())
+                    setTimeout(() => {stalemateAudio.play()}, 200)
                 showResult("Stalemate", "d")
             }
         } else {
             if(isCheck(pieceColour(piece)==="w" ? "b" : "w", tiles)){
-                setTimeout(() => {checkAudio.play()}, 300)
+                if (getSoundOn())
+                    setTimeout(() => {checkAudio.play()}, 300)
                 console.log("Check")
             }
         }
@@ -246,6 +290,7 @@ const Chessboard = () => {
         setTurn("w")
         setTilesData(tiles)
         movesList = []
+        resetTileColour()
         resetState()
         resetBoardStatus()
         storeBoardStatus(tiles)
@@ -305,6 +350,8 @@ const Chessboard = () => {
                 boardRepetition = boardRepeated()
                 console.log("repeated", boardRepetition)
 
+                highlightTiles(startTile, endTile)
+
                 currCheckStatus(droppedId)
                 // if (isStalemate(tiles)){
                 //     if(isCheck(pieceColour(droppedId)==="w" ? "b" : "w", tiles)){
@@ -338,12 +385,15 @@ const Chessboard = () => {
 
     return (
     <>
-        <button className="game-btn" id="newgame-btn" onClick={(event) => startNewGame(event)}>
-            New Game
-        </button>
-        <button className="game-btn" id="draw-btn" onClick={(event) => checkDraw(event)}>
-            {getNoCapture()>=49 || boardRepetition>=3 ? "Claim" : "Offer"} Draw
-        </button>
+        <div className="control-panel">
+            <button className="game-btn" id="newgame-btn" onClick={(event) => startNewGame(event)}>
+                New Game
+            </button>
+            <button className="game-btn" id="draw-btn" onClick={(event) => checkDraw(event)}>
+                {getNoCapture()>=49 || boardRepetition>=3 ? "Claim" : "Offer"} Draw
+            </button>
+            <Controls />
+        </div>
         <div className="board-container">
         <h3 className="player-turn">
             {`${turn==="w" ? "White" : "Black"}'s turn`}{temp===11 ? "!" : ""}
@@ -380,6 +430,10 @@ const Chessboard = () => {
     </>
     )
 }
+
+
+
+
 
 export default Chessboard
 export {pieceColour, promotePawnTo, setOpponent}

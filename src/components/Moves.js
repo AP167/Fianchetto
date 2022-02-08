@@ -1,5 +1,5 @@
-import React from 'react'
 import { pieceColour } from './Chessboard'
+import { getSoundOn } from './Controls'
 // import { tiles } from './Chesspieces'
 
 var moveAudio = new Audio('/assets/sound/Move.mp3')
@@ -414,25 +414,23 @@ const validMove = (piece, start, end, tiles) => {
     else
       noCapture++
     // console.log("NoCapture", noCapture)
-    if (tiles[end[0]][end[1]]){
-      captureAudio.play()
-    } else if (castleMove){
-      castleMove = false
-      castlleAudio.play()
-    } else {
-      moveAudio.play()
+
+    if (getSoundOn()){
+      if (tiles[end[0]][end[1]])
+        captureAudio.play()
+      else if (castleMove)
+        castlleAudio.play()
+      else 
+        moveAudio.play()
     }
     
-    moveAudio.play()
+    
+    castleMove = false
+
     return true
 
   }
 }
 
 
-const Moves = () => {
-  return <div></div>
-}
-
-export default Moves
 export {validMove, isCheck, isStalemate, getPlayer, getNoCapture, resetState}

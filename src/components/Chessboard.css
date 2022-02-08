@@ -58,9 +58,24 @@
     color: rgb(53, 45, 37);
 }
 
-.game-btn{
+.control-panel{
     position: fixed;
+    /* padding: 2vh; */
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-around; */
+    /* align-items: center; */
+    right: 3vh;
+    top: 3vh;
+    height: 80vh;
+    width: 20vw;
+    /* background: rgb(139, 133, 108); */
+}
+
+.game-btn{
+    /* position: fixed; */
     margin: 2vh;
+    margin-left: 2vw;
     width: 10vw;
     padding: 2vh;
     text-align: center;
@@ -74,7 +89,7 @@
     background-color: rgb(153, 117, 73);
 }
 
-#newgame-btn{
+/* #newgame-btn{
     right: 3vh;
     top: 3vh;
 }
@@ -82,4 +97,6 @@
 #draw-btn{
     right: 3vh;
     top: 12vh;
-}
+} */
+
+
