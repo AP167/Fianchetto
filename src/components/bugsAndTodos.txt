@@ -15,19 +15,16 @@ Pawns cannot move 2 places in first move, change this. ✅
 Check which player's turn it is. ✅
 
 Castling  ✅
-Pawn promotion  ✅
+Pawn promotion  ✅✨✨
 En passant  ✅
 Check  ✅ 
-Checkmate  ✅
+Checkmate  ✅✨
 Stalemate  ✅
 50 move rule  ✅
 75 move rule  ✅
-3 fold repetition  ✅
+3 fold repetition  ✅✨
 5 fold repetition  ✅
 
-
-The game can be still continued after draw, disable draggable property after result window
-is shown.
 
 The pawn doesn't change immediately after promotion. Find a way to call setTiles after changing
 tiles value.  ✅
@@ -42,8 +39,27 @@ only for ids having single digit numbers.  ✅
 
 Use useState for tile data. ✅
 
+Highlight moves.  ✅
+
+
 Store data locally.
 
-Highlight valid moves.
+
+The game can be still continued after draw, disable draggable property after result window
+is shown.  ✅
+
+
+Rotate the board for black player in multiplayer mode.
+
+Add a div to show all the past moves.
+
+Use flexbox for centering the board instead of grid.
+
+Display game result instead of player's turn on top of the board after the game has ended.  ✅
+
+Add a dialog box for choosing stockfish difficulty level.
+
+Add an option for choosing between challenging a friend or a random person in multiplayer mode.
+
 
 Fix the key prop warning.

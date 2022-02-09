@@ -5,7 +5,7 @@ import { initializeBoard, ChessPiece } from './Chesspieces'
 import { validMove, isCheck, isStalemate, getPlayer, resetState, getNoCapture } from './Moves'
 import {resetBoardStatus, storeBoardStatus, boardRepeated, popBoardStatus} from './StoreBoardStatus'
 import { pawnPromotion } from './PawnPromotionDialog'
-import { showResult } from './ResultDialog'
+import { showResult, getResult, hasGameEnded, resetGameEnded } from './ResultDialog'
 import * as engine from '../Engine/myEngine'
 import Controls from './Controls'
 import { getSoundOn, getHighlightOn } from './Controls'
@@ -33,11 +33,14 @@ var movesList = []
 var promotedCountW = 3, promotedCountB = 3
 var opponent = "b"
 var gameMode = "s"
-var gameStarted = true
+var gameStarted = true 
 var boardRepetition = 1
 
 var origTileColour = [null, null, null, null]
 
+
+/* gameStarted is only to stop the stockfish from making a move from the previous 
+data after new game btn is clicked */
 
 // const getLocalData = () => {
 //     const lists = localStorage.getItem("boardStatus")
@@ -73,7 +76,7 @@ const stockfishMove = (predictions) => {
     var end = [parseInt(endPos[1])-1, endPos[0].charCodeAt(0)-97]
     var promotion = predictions.get("promotion")
     var newPiece
-    if (gameStarted){
+    if (gameStarted && !hasGameEnded()){
         if (tiles[start[0]][start[1]]){
             var piece = tiles[start[0]][start[1]].pId
             console.log(start, end, piece)
@@ -166,6 +169,8 @@ const promotePawnTo = (piece, oldPiece, pos) => {
 }
 
 
+const refreshBoard = () => {Chessboard.reloadBoard()}
+
 
 
 
@@ -211,6 +216,11 @@ const Chessboard = () => {
     // React.useEffect(() => {
     //     localStorage.setItem("boardStatus", JSON.stringify(tilesData))
     // }, [turn, tilesData])
+
+    const reloadBoard = () => {
+        setTemp((temp+1)%10)
+    }
+    Chessboard.reloadBoard = reloadBoard
 
     const currCheckStatus = (piece) => {
         if (isStalemate(tiles)){
@@ -290,6 +300,8 @@ const Chessboard = () => {
         setTurn("w")
         setTilesData(tiles)
         movesList = []
+        boardRepetition = 1
+        resetGameEnded()
         resetTileColour()
         resetState()
         resetBoardStatus()
@@ -329,7 +341,7 @@ const Chessboard = () => {
 
         console.log("Mode", gameMode)
 
-        if (getPlayer()!==opponent && validMove(droppedId, start, end, tiles))
+        if (getPlayer()!==opponent && !hasGameEnded() && validMove(droppedId, start, end, tiles))
         {
             if (droppedAtId.startsWith("tile") || pieceColour(droppedId) !== pieceColour(droppedAtId)){
                 setTurn(turn==="w" ? "b" : "w")
@@ -396,7 +408,7 @@ const Chessboard = () => {
         </div>
         <div className="board-container">
         <h3 className="player-turn">
-            {`${turn==="w" ? "White" : "Black"}'s turn`}{temp===11 ? "!" : ""}
+            {hasGameEnded()? getResult() : `${turn==="w" ? "White" : "Black"}'s turn`}{temp===11 ? "!" : ""}
         </h3>
         <div className="board" id="board">
             {reverseRows.map((row, I) => {
@@ -436,5 +448,5 @@ const Chessboard = () => {
 
 
 export default Chessboard
-export {pieceColour, promotePawnTo, setOpponent}
+export {pieceColour, promotePawnTo, setOpponent, refreshBoard}
 

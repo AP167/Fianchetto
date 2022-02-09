@@ -1,11 +1,29 @@
 import React from 'react'
+import { refreshBoard } from './Chessboard'
 import './ResultDialog.css'
 
 var gameOverAudio = new Audio('/assets/sound/GameOver.mp3')
 
+var gameEnded = false
+var result = ""
+
+const hasGameEnded = () => gameEnded
+
+const resetGameEnded = () => {
+    gameEnded = false
+    result = ""
+}
+
+const getResult = () => result
+
+
+
 const showResult = (newGameStatus, newWinner) => {
     document.getElementById("result-container").style.visibility="visible"
     document.getElementById("result-container").style.zIndex="3"
+
+    gameEnded = true
+
     var win = "Draw"
     if (newWinner==="w") 
         win = "White has won!"
@@ -14,13 +32,19 @@ const showResult = (newGameStatus, newWinner) => {
 
     if (newGameStatus!=="Stalemate" && newWinner==="d")
         setTimeout(() => {gameOverAudio.play()}, 200)
+
+    result = newGameStatus + " : " + win
+
     ResultDialog.setResult(newGameStatus, win)
 }
+
 
 const closeDialog = () => {
     document.getElementById("result-container").style.visibility="hidden"
     document.getElementById("result-container").style.zIndex="-3"
+    refreshBoard()
 }
+
 
 const ResultDialog = () => {
     const [gameStatus, setGameStatus] = React.useState("game status")
@@ -47,4 +71,4 @@ const ResultDialog = () => {
 }
 
 export default ResultDialog
-export {showResult}
+export {showResult, getResult, resetGameEnded, hasGameEnded}
