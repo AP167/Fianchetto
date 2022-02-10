@@ -1,5 +1,5 @@
 import React from 'react'
-import './Chessboard.css'
+import './styles/Chessboard.css'
 
 
 class ChessPiece{

@@ -1,4 +1,4 @@
-import './GamePage.css'
+import './styles/GamePage.css'
 import './Chessboard'
 import Chessboard from './Chessboard'
 import DialogBox from './PawnPromotionDialog'

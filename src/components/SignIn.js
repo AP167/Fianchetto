@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import './signIn.styles.css';
+import './styles/SignIn.styles.css';
 import { signInWithEmailPass } from '../authentication/authentication';
 
 

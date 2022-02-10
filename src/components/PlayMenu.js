@@ -1,6 +1,6 @@
 import React from 'react'
 import { setOpponent } from './Chessboard'
-import './PlayMenu.css'
+import './styles/PlayMenu.css'
 
 const play1 = (event) => {
     event.preventDefault()

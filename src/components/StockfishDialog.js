@@ -1,5 +1,5 @@
 import React from 'react'
-import './StockfishDialog.css'
+import './styles/StockfishDialog.css'
 import { setOpponent } from './Chessboard'
 
 const setPlayerSide = () => {

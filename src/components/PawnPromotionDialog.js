@@ -1,5 +1,5 @@
 import React from 'react'
-import './PawnPromotionDialog.css'
+import './styles/PawnPromotionDialog.css'
 import { promotePawnTo } from './Chessboard'
 import { pieceColour } from './Chessboard'
 

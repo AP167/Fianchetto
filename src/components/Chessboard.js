@@ -1,5 +1,5 @@
 import React from 'react'
-import './Chessboard.css'
+import './styles/Chessboard.css'
 import Chesspieces from './Chesspieces'
 import { initializeBoard, ChessPiece } from './Chesspieces'
 import { validMove, isCheck, isStalemate, getPlayer, resetState, getNoCapture } from './Moves'

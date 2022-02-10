@@ -1,6 +1,6 @@
 import React from 'react'
 import { refreshBoard } from './Chessboard'
-import './ResultDialog.css'
+import './styles/ResultDialog.css'
 
 var gameOverAudio = new Audio('/assets/sound/GameOver.mp3')
 

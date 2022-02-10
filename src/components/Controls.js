@@ -1,5 +1,5 @@
 import React from 'react'
-import './Controls.css'
+import './styles/Controls.css'
 
 
 var soundOn = true
