@@ -34,6 +34,10 @@ var stalemateAudio = new Audio('/assets/sound/Stalemate.mp3')
 const rows = ["1", "2", "3", "4", "5", "6", "7", "8"]
 const reverseRows = ["8", "7", "6", "5", "4", "3", "2", "1"]
 const columns = ["a", "b", "c", "d", "e", "f", "g", "h"]
+const WHITE_TILE_COLOUR = "rgb(218, 199, 175)"
+const BLACK_TILE_COLOUR = "rgb(165, 129, 100)"
+const WHITE_TILE_HIGHLIGHT = "rgb(205, 220, 140)"
+const BLACK_TILE_HIGHLIGHT = "rgb(180, 194, 112)"
 
 var tiles = new Array(8)
 for (var i = 0; i<8; i++){
@@ -78,6 +82,7 @@ const rotateBoard = (playerSide) => {
     const tileDiv = document.getElementsByClassName("tile")
     for (i=0; i<tileDiv.length; i++){
         tileDiv[i].style.transform = `rotate(${deg}deg)`
+        tileDiv[i].style.outline = "1px solid " + getTileColour(tileDiv[i].id, false)
     }
     const rankW = document.getElementsByClassName("rankW")
     const fileW = document.getElementsByClassName("fileW")
@@ -105,11 +110,11 @@ const setOpponent = (opp, mode) => {
     document.getElementById("stockfish-menu-container").style.zIndex="-4"
     document.getElementById("highlight-switch").checked = getHighlightOn()
     document.getElementById("sound-switch").checked = getSoundOn()
-    rotateBoard(opp==="w" ? "b" : "w")
+    // rotateBoard(opp==="w" ? "b" : "w")
     if (opp==="w" && mode==="s"){
-        console.log("hi")
         gameStarted = true
         engine.predict(movesList)
+        rotateBoard("b")
     }
     // setTimeout(() => {gameStartAudio.play()}, 200)
 }
@@ -219,22 +224,25 @@ const refreshBoard = () => {Chessboard.reloadBoard()}
 
 
 
+const getTileColour = (tileId, highlight) => {
+    if ((parseInt(tileId[4]) + parseInt(tileId[5]))%2===0){
+        return highlight ? WHITE_TILE_HIGHLIGHT : WHITE_TILE_COLOUR
+    } else {
+        return highlight ? BLACK_TILE_HIGHLIGHT : BLACK_TILE_COLOUR
+    }
+}
+
 
 const highlightTiles = (startTile, endTile) => {
     resetTileColour()
     if (getHighlightOn()){
         var newStartTile = document.getElementById(startTile)
         var newEndTile = document.getElementById(endTile)
-        origTileColour = [startTile, endTile, newStartTile.style.backgroundColor, newEndTile.style.backgroundColor]
-        // console.log("tiles", startTile, endTile)
-        if ((parseInt(startTile[4])+parseInt(startTile[5]))%2===0)
-            newStartTile.style.backgroundColor = "rgb(205, 220, 140)"
-        else
-            newStartTile.style.backgroundColor = "rgb(180, 194, 112)"
-        if ((parseInt(endTile[4])+parseInt(endTile[5]))%2===0)
-            newEndTile.style.backgroundColor = "rgb(205, 220, 140)"
-        else
-            newEndTile.style.backgroundColor = "rgb(180, 194, 112)"
+        origTileColour = [startTile, endTile, getTileColour(startTile, false), getTileColour(endTile, false)]
+        newStartTile.style.backgroundColor = getTileColour(startTile, true)
+        newStartTile.style.outlineColor = getTileColour(startTile, true)
+        newEndTile.style.backgroundColor =  getTileColour(endTile, true)
+        newEndTile.style.outlineColor =  getTileColour(endTile, true)
     }
 }
 
@@ -244,6 +252,8 @@ const resetTileColour = () => {
         var oldEndTile = document.getElementById(origTileColour[1])
         oldStartTile.style.backgroundColor = origTileColour[2]
         oldEndTile.style.backgroundColor = origTileColour[3]
+        oldStartTile.style.outlineColor = origTileColour[2]
+        oldEndTile.style.outlineColor = origTileColour[3]
     }
     origTileColour = [null, null, null, null]
 }
@@ -339,6 +349,9 @@ const Chessboard = () => {
     const startNewGame = (event) => {
         event.preventDefault()
         console.log("new game started")
+        if (gameMode==="s" && opponent==="w"){
+            rotateBoard("w")
+        }
         gameStarted = false
         initializeBoard(tiles)
         console.log(tiles)
