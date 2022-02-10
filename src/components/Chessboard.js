@@ -10,6 +10,20 @@ import * as engine from '../Engine/myEngine'
 import Controls from './Controls'
 import { getSoundOn, getHighlightOn } from './Controls'
 
+
+
+// import fetch from 'node-fetch';
+
+// const userAction = async () => {
+//   const response = await fetch('https://taytay.pythonanywhere.com/challenge?opponent_username=a', {
+//     "username" : "b"
+// });
+//   console.log(response)
+//   //const myJson = await response.json(); //extract JSON from the http response
+// }
+
+// userAction();
+
 // var gameStartAudio = new Audio('/assets/sound/GameStart.mp3')
 var checkAudio = new Audio('/assets/sound/Check.mp3')
 var checkmateAudio = new Audio('/assets/sound/Checkmate.mp3')
@@ -89,6 +103,8 @@ const setOpponent = (opp, mode) => {
     document.getElementById("sound-switch").checked = getSoundOn()
     rotateBoard(opp==="w" ? "b" : "w")
     if (opp==="w" && mode==="s"){
+        console.log("hi")
+        gameStarted = true
         engine.predict(movesList)
     }
     // setTimeout(() => {gameStartAudio.play()}, 200)
