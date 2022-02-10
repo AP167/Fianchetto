@@ -1,0 +1,6 @@
+.GamePage {
+    display: grid;
+    place-content: center;
+    height: 100vh;
+    background-color: rgb(56, 53, 47);
+  }

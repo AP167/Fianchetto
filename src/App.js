@@ -1,21 +1,15 @@
-import './App.css'
-import './components/Chessboard'
-import Chessboard from './components/Chessboard'
-import DialogBox from './components/PawnPromotionDialog'
-import ResultDialog from './components/ResultDialog'
-import PlayMenu from './components/PlayMenu'
-import StockfishDialog from './components/StockfishDialog'
+import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import SignIn from "./components/SignIn";
+// import SignUp from "./components/SignUp";
+import GamePage from "./components/GamePage"
 
-function App() {
-  return (
-    <div className="App">
-      <PlayMenu />
-      <StockfishDialog />
-      <Chessboard />
-      <DialogBox />
-      <ResultDialog />
-    </div>
-  );
+export default function App() {
+    return (
+        <Router>
+            <Routes>
+                <Route path ='/' element={<SignIn />} />
+                <Route path = '/signUp' element={<GamePage />} />
+            </Routes>
+        </Router>
+    )
 }
-
-export default App
