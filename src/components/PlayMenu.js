@@ -4,7 +4,10 @@ import './PlayMenu.css'
 
 const play1 = (event) => {
     event.preventDefault()
-    setOpponent("b", "s")
+    document.getElementById("play-menu").style.visibility="hidden"
+    document.getElementById("play-menu").style.zIndex="-5"
+    document.getElementById("stockfish-menu-container").style.visibility="visible"
+    document.getElementById("stockfish-menu-container").style.zIndex="4"
 }
 
 const play2 = (event) => {

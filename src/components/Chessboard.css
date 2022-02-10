@@ -45,9 +45,13 @@
 .rank{
     position: absolute;
     left: -2vh;
-    top: 3vh;
+    top: 3.2vh;
     font-size: 2vh;
     color: rgb(53, 45, 37);
+}
+
+.rankB{
+    visibility: hidden;
 }
 
 .file{

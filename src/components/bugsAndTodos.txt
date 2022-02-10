@@ -49,7 +49,7 @@ The game can be still continued after draw, disable draggable property after res
 is shown.  ✅
 
 
-Rotate the board for black player in multiplayer mode.
+Rotate the board for black player in multiplayer mode.  ✅
 
 Add a div to show all the past moves.
 

@@ -57,14 +57,40 @@ data after new game btn is clicked */
 // getLocalData()
 
 
+const rotateBoard = (playerSide) => {
+    var i, deg
+    deg = playerSide==="w" ? "0" : "180"
+    document.getElementById("board").style.transform = `rotate(${deg}deg)`
+    const tileDiv = document.getElementsByClassName("tile")
+    for (i=0; i<tileDiv.length; i++){
+        tileDiv[i].style.transform = `rotate(${deg}deg)`
+    }
+    const rankW = document.getElementsByClassName("rankW")
+    for (i=0; i<rankW.length; i++){
+        rankW[i].style.visibility = playerSide==="w" ? "visible" : "hidden"
+    } 
+    const rankB = document.getElementsByClassName("rankB")
+    for (i=0; i<rankB.length; i++){
+        rankB[i].style.visibility = playerSide==="b" ? "visible" : "hidden"
+    } 
+}
+
+
+
 
 const setOpponent = (opp, mode) => {
     opponent = opp
     gameMode = mode
     document.getElementById("play-menu").style.visibility="hidden"
     document.getElementById("play-menu").style.zIndex="-5"
+    document.getElementById("stockfish-menu-container").style.visibility="hidden"
+    document.getElementById("stockfish-menu-container").style.zIndex="-4"
     document.getElementById("highlight-switch").checked = getHighlightOn()
     document.getElementById("sound-switch").checked = getSoundOn()
+    rotateBoard(opp==="w" ? "b" : "w")
+    if (opp==="w" && mode==="s"){
+        engine.predict(movesList)
+    }
     // setTimeout(() => {gameStartAudio.play()}, 200)
 }
 
@@ -180,7 +206,7 @@ const highlightTiles = (startTile, endTile) => {
         var newStartTile = document.getElementById(startTile)
         var newEndTile = document.getElementById(endTile)
         origTileColour = [startTile, endTile, newStartTile.style.backgroundColor, newEndTile.style.backgroundColor]
-        console.log("tiles", startTile, endTile)
+        // console.log("tiles", startTile, endTile)
         if ((parseInt(startTile[4])+parseInt(startTile[5]))%2===0)
             newStartTile.style.backgroundColor = "rgb(205, 220, 140)"
         else
@@ -282,10 +308,10 @@ const Chessboard = () => {
         //         console.log("Check")
         //     }
         // }
-        if (getPlayer()===opponent){
-            console.log("opponents turn")
-            engine.predict(movesList)
-        }
+        // if (getPlayer()===opponent){
+        //     console.log("opponents turn22222")
+        //     engine.predict(movesList)
+        // }
     }
 
     Chessboard.setStockfishState = setStockfishState
@@ -421,8 +447,12 @@ const Chessboard = () => {
                                 onDragOver={(event) => allowDrop(event)}
                                 onDrop={(event) => drop(event)}
                                 id={`tile${i}${j}`} >
-                                <span className="rank">{j===0 ? rows[i] : ""}</span>
-                                <span className="file">{i===0 ? columns[j] : ""}</span>
+                                <span className={`rank ${j===7? "rankB" : "rankW"}`}>
+                                    {j===0 || j===7 ? rows[i] : ""}
+                                </span>
+                                <span className={`file ${j===7? "fileB" : "fileW"}`}>
+                                    {i===0 || i===7 ? columns[j] : ""}
+                                </span>
                                 <Chesspieces 
                                     i={i} 
                                     j={j} 
