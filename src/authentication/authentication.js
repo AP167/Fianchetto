@@ -1,4 +1,6 @@
-import { initializeApp, getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from 'firebase/app';
+import { initializeApp } from 'firebase/app';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+// import {nextPage} from "../components/SignIn"
 
 function initApp(){
 const firebaseConfig = {
@@ -15,7 +17,7 @@ const app = initializeApp(firebaseConfig);
 return app;
 }
 
-function signUpWithEmailPass(email, password){
+function signUpWithEmailPass(email, password, gotoNextPage){
 
 	const app=initApp();
 	const auth = getAuth(app);
@@ -25,18 +27,20 @@ function signUpWithEmailPass(email, password){
 	    // Signed in 
 	    const user = userCredential.user;
 	    console.log("Sign Up Success");
+		gotoNextPage(status)
 	  })
 	  .catch((error) => {
 	    const errorCode = error.code;
 	    const errorMessage = error.message;
 	    console.log("Sign Up Failed"+errorCode);
 	    status = errorCode;
+		gotoNextPage(status)
 	  });
 
 	return status
 }
 
-function signInWithEmailPass(email, password){
+function signInWithEmailPass(email, password, gotoNextPage){
 	const app=initApp();
 	const auth = getAuth(app);
 	var status='success';
@@ -45,20 +49,22 @@ function signInWithEmailPass(email, password){
 	    // Signed in 
 	    const user = userCredential.user;
 	    console.log("Sign In Success");
+		gotoNextPage(status)
 	  })
 	  .catch((error) => {
 	   const errorCode = error.code;
 	    const errorMessage = error.message;
 	    console.log("Sign In Failed"+errorCode);
 	    status = errorCode;
+		gotoNextPage(status)
 	  });
-      return status
 }
+
+
 
 function signOutUser(){
 	const app=initApp();
 	const auth = getAuth(app);
-	const auth = getAuth();
 	signOut(auth).then(() => {
 	  console.log("User signed out");
 	}).catch((error) => {

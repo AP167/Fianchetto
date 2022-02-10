@@ -1,10 +1,25 @@
 import * as React from 'react';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import './signUP.styles.css'
+import './SignUp.styles.css'
+import { signUpWithEmailPass } from '../authentication/authentication';
 
 export default function SignUp() {
     let navigate = useNavigate();
+
+    const signUpUser = () => {
+        const email = document.getElementById("email")
+        const password = document.getElementById("password")
+        signUpWithEmailPass(email.value, password.value, gotoNextPage)
+    }
+
+    const gotoNextPage = (status) => {
+        if (status==="success"){
+            navigate('/gamePage')
+        } else {
+            alert(status)
+        }
+    }
         return (
             <div className="sign-up-page">
                 <Box className='Sign-Up'>
@@ -27,7 +42,7 @@ export default function SignUp() {
                                 <h1>SIGN UP</h1>
                             </Typography>
 
-                            <TextField required id = 'username' label = 'Username' >
+                            <TextField required id = 'email' label = 'Email' >
                             </TextField>
                             
                             <TextField required id = 'password' label = 'Password' type = 'password'>
@@ -45,7 +60,8 @@ export default function SignUp() {
                                 width: '70%',
                                 height: '7%',
                                 left: '14%',
-                            }} href = ''>
+                            }} 
+                            onClick={signUpUser} >
                                 <Typography color='#f2ead3' fontFamily='sans-serif' padding='0'>
                                     <h4>Sign Up</h4>
                                 </Typography>

@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import SignIn from "./components/SignIn";
-// import SignUp from "./components/SignUp";
+import SignUp from "./components/SignUp";
 import GamePage from "./components/GamePage"
 
 export default function App() {
@@ -8,7 +8,8 @@ export default function App() {
         <Router>
             <Routes>
                 <Route path ='/' element={<SignIn />} />
-                <Route path = '/signUp' element={<GamePage />} />
+                <Route path = '/signUp' element={<SignUp />} />
+                <Route path = '/gamePage' element={<GamePage />} />
             </Routes>
         </Router>
     )
