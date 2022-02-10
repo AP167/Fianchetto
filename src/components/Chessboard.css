@@ -62,6 +62,10 @@
     color: rgb(53, 45, 37);
 }
 
+.fileB{
+    visibility: hidden;
+}
+
 .control-panel{
     position: fixed;
     /* padding: 2vh; */

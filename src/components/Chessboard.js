@@ -80,12 +80,16 @@ const rotateBoard = (playerSide) => {
         tileDiv[i].style.transform = `rotate(${deg}deg)`
     }
     const rankW = document.getElementsByClassName("rankW")
+    const fileW = document.getElementsByClassName("fileW")
     for (i=0; i<rankW.length; i++){
         rankW[i].style.visibility = playerSide==="w" ? "visible" : "hidden"
+        fileW[i].style.visibility = playerSide==="w" ? "visible" : "hidden"
     } 
     const rankB = document.getElementsByClassName("rankB")
+    const fileB = document.getElementsByClassName("fileB")
     for (i=0; i<rankB.length; i++){
         rankB[i].style.visibility = playerSide==="b" ? "visible" : "hidden"
+        fileB[i].style.visibility = playerSide==="b" ? "visible" : "hidden"
     } 
 }
 
@@ -466,7 +470,7 @@ const Chessboard = () => {
                                 <span className={`rank ${j===7? "rankB" : "rankW"}`}>
                                     {j===0 || j===7 ? rows[i] : ""}
                                 </span>
-                                <span className={`file ${j===7? "fileB" : "fileW"}`}>
+                                <span className={`file ${i===7? "fileB" : "fileW"}`}>
                                     {i===0 || i===7 ? columns[j] : ""}
                                 </span>
                                 <Chesspieces 
