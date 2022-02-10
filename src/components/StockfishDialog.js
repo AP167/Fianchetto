@@ -23,11 +23,11 @@ const StockfishDialog = () => {
                 <h3>Choose your side</h3>
                 <form id="player-btn-grp">
                     <label className="player-btn">
-                        <input type="radio" name="player-side" value="w" defaultChecked />
+                        <input className="player-side-btn" type="radio" name="player-side" value="w" defaultChecked />
                         <img className="player-btn-img" src="/images/king_w.png" alt="White" />
                     </label>
                     <label className="player-btn">
-                        <input type="radio" name="player-side" value="b" />
+                        <input className="player-side-btn" type="radio" name="player-side" value="b" />
                         <img className="player-btn-img" src="/images/king_b.png" alt="Black" />
                     </label>
                 </form>

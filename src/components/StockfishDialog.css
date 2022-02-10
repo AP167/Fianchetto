@@ -42,20 +42,20 @@
     justify-content: space-around;
 }
 
-[type=radio] { 
+.player-side-btn { 
     position: absolute;
     opacity: 0;
     width: 0;
     height: 0;
 }
   
-[type=radio] + img {
+.player-side-btn + img {
     cursor: pointer;
     border-radius: 3px;
     border: 2px solid rgba(255, 255, 255, 0);
 }
   
-[type=radio]:checked + img {
+.player-side-btn:checked + img {
     border-color: rgb(65, 44, 21);
 }
 
