@@ -27,14 +27,14 @@ function signUpWithEmailPass(email, password, gotoNextPage){
 	    // Signed in 
 	    const user = userCredential.user;
 	    console.log("Sign Up Success");
-		gotoNextPage(status)
+		gotoNextPage(status, user.uid)
 	  })
 	  .catch((error) => {
 	    const errorCode = error.code;
 	    const errorMessage = error.message;
 	    console.log("Sign Up Failed"+errorCode);
 	    status = errorCode;
-		gotoNextPage(status)
+		gotoNextPage(status, null)
 	  });
 
 	return status
@@ -49,14 +49,15 @@ function signInWithEmailPass(email, password, gotoNextPage){
 	    // Signed in 
 	    const user = userCredential.user;
 	    console.log("Sign In Success");
-		gotoNextPage(status)
+		console.log("uid", user.uid)
+		gotoNextPage(status, user.uid)
 	  })
 	  .catch((error) => {
 	   const errorCode = error.code;
 	    const errorMessage = error.message;
 	    console.log("Sign In Failed"+errorCode);
 	    status = errorCode;
-		gotoNextPage(status)
+		gotoNextPage(status, null)
 	  });
 }
 

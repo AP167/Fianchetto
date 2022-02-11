@@ -1,6 +1,7 @@
 import React from 'react'
 import { setOpponent } from './Chessboard'
 import './styles/PlayMenu.css'
+import { getGameId } from './Challenge'
 
 const play1 = (event) => {
     event.preventDefault()
@@ -12,6 +13,7 @@ const play1 = (event) => {
 
 const play2 = (event) => {
     event.preventDefault()
+    getGameId("a", "b")
     setOpponent("", "m")
 }
 

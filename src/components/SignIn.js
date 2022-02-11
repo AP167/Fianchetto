@@ -14,9 +14,10 @@ export default function SignIn() {
             signInWithEmailPass(email.value, password.value, gotoNextPage)
         }
 
-        const gotoNextPage = (status) => {
+        const gotoNextPage = (status, userId) => {
             if (status==="success"){
-                navigate('/gamePage')
+                console.log("userId before navigate : ", userId)
+                navigate('/gamePage', { state: { uid : userId } })
             } else {
                 alert(status)
             }
