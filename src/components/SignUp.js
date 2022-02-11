@@ -15,7 +15,7 @@ export default function SignUp() {
 
     const gotoNextPage = (status, userId) => {
         if (status==="success"){
-            navigate('/gamePage', { state: { uid : userId } })
+            navigate('/game-page', { state: { uid : userId } })
         } else {
             alert(status)
         }
@@ -66,7 +66,7 @@ export default function SignUp() {
                                     <h4>Sign Up</h4>
                                 </Typography>
                             </Button>
-                            <Button onClick={() => navigate('/')} sx = {{
+                            <Button onClick={() => navigate('/sign-in')} sx = {{
                                 m: 1.5,
                                 color: '#321313',
                                 left: '14%',

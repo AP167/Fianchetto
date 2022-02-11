@@ -17,7 +17,7 @@ export default function SignIn() {
         const gotoNextPage = (status, userId) => {
             if (status==="success"){
                 console.log("userId before navigate : ", userId)
-                navigate('/gamePage', { state: { uid : userId } })
+                navigate('/game-page', { state: { uid : userId } })
             } else {
                 alert(status)
             }

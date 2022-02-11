@@ -1,0 +1,53 @@
+#home-page{
+    height: 100vh;
+    width: 100vw;
+    background: linear-gradient(45deg, rgba(152,118,94,1) 3%, rgba(205,157,109,1) 58%, rgba(252,199,132,1) 96%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.app-title{
+    display: flex;
+    flex-direction: row;
+}
+
+#app-logo{
+    height: 30vh;
+}
+
+#app-name{
+    color: rgb(65, 44, 21);
+    margin: 8vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#app-name h1{
+    margin: 0;
+    font-size: 8vh;
+}
+
+.nav-btn-grp{
+    height: 30vh;
+    padding: 8vh 10vw 2vh 10vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.nav-btn{
+    margin: 2vh;
+    width: 20vw;
+    padding: 2vh;
+    text-align: center;
+    background-color: rgb(134, 102, 62);
+    border: 2px solid rgb(71, 54, 38);
+    border-radius: 2px;
+}
+.nav-btn:hover{
+    background-color: rgb(153, 117, 73);
+}
