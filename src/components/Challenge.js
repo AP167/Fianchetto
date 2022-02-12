@@ -17,7 +17,7 @@ const createGame = (user1, user2) => {
     };
 
 
-    fetch(`http://taytay.pythonanywhere.com/challenge?username=${user1}&opponent_username=${user2}`, requestOptions)
+    fetch(`https://taytay.pythonanywhere.com/challenge?username=${user1}&opponent_username=${user2}`, requestOptions)
     .then(response => response.text())
     .then(result => joinAsChallenger(user1, user2, result))
     .catch(error => console.log('error', error));
