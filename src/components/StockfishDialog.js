@@ -11,7 +11,7 @@ const setPlayerSide = () => {
         }
     }
     console.log("Playing side", playerSide)
-    setOpponent(playerSide==="w" ? "b" : "w", "s")
+    setOpponent(playerSide==="w" ? "b" : "w", "s", "", "")
 }
 
 const StockfishDialog = () => {

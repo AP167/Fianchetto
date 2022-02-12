@@ -1,5 +1,8 @@
 .sign-up-page{
     margin: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -10,18 +13,19 @@
 .Sign-Up {
     height: 100vh;
     width: 100vw;
+    overflow: hidden;
     background: linear-gradient(45deg, rgba(152,118,94,1) 3%, rgba(205,157,109,1) 58%, rgba(252,199,132,1) 96%);
     visibility: visible;
     z-index: 5;
 }
 .Left-Box {
     position: absolute;
-    width: 45%;
+    width: 38%;
     height: 90%;
     left: 5%;
     top: 5%;
     background: #F2EAD3;
-    border-radius: 10%;
+    border-radius: 6%;
     flex: content;
     display: flex;
     flex-direction: column; 

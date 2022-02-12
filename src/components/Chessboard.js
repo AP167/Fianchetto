@@ -9,6 +9,7 @@ import { showResult, getResult, hasGameEnded, resetGameEnded } from './ResultDia
 import * as engine from '../Engine/myEngine'
 import Controls from './Controls'
 import { getSoundOn, getHighlightOn } from './Controls'
+// import { sendMove } from './Challenge'
 
 
 
@@ -53,10 +54,15 @@ var opponent = "b"
 var gameMode = "s"
 var gameStarted = true 
 var boardRepetition = 1
+var gameId = ""
+var oppPlayer = ""
+var myUsername = ""
 
 var origTileColour = [null, null, null, null]
 
-
+const setUsername = (user1) =>{
+    myUsername = user1
+}
 /* gameStarted is only to stop the stockfish from making a move from the previous 
 data after new game btn is clicked */
 
@@ -101,22 +107,130 @@ const rotateBoard = (playerSide) => {
 
 
 
-const setOpponent = (opp, mode) => {
+const setOpponent = (opp, mode, gId, player2) => {
+    console.log("Opponent is set")
     opponent = opp
     gameMode = mode
+    gameId = gId
+    oppPlayer = player2
     document.getElementById("play-menu").style.visibility="hidden"
     document.getElementById("play-menu").style.zIndex="-5"
     document.getElementById("stockfish-menu-container").style.visibility="hidden"
     document.getElementById("stockfish-menu-container").style.zIndex="-4"
     document.getElementById("highlight-switch").checked = getHighlightOn()
     document.getElementById("sound-switch").checked = getSoundOn()
+
+    console.log("play menu should be hidden", gameId)
     // rotateBoard(opp==="w" ? "b" : "w")
     if (opp==="w" && mode==="s"){
         gameStarted = true
         engine.predict(movesList)
         rotateBoard("b")
     }
+
+    if (opp==="w" && mode==="m"){
+        setTimeout(() => {
+            var requestOptions = {
+                method: 'GET',
+                redirect: 'follow'
+              };
+              
+              fetch(`http://taytay.pythonanywhere.com/get-opponent-move?game_id=${gameId}&player=${myUsername}`, requestOptions)
+                .then(response => response.text())
+                .then(result => multiPlayerMove(result))
+                .catch(error => multiPlayerMove(error));
+        }, 100)
+    }
     // setTimeout(() => {gameStartAudio.play()}, 200)
+    // if (gameMode==="m"){
+    //     // while(true){
+    //         setTimeout(() => {
+    //             var requestOptions = {
+    //                 method: 'GET',
+    //                 redirect: 'follow'
+    //               };
+                  
+    //               fetch(`http://taytay.pythonanywhere.com/get-opponent-move?game_id=${gameId}&player=${myUsername}`, requestOptions)
+    //                 .then(response => response.text())
+    //                 .then(result => multiPlayerMove(result))
+    //                 .catch(error => console.log('error', error));
+    //         }, 10000)
+            
+    //     // }
+    // }
+}
+
+
+const multiPlayerMove = (move) => {
+    console.log(move, gameId)
+    if (move.length===4 || move.length===5){
+        var startPos = move[0]+move[1]
+        var endPos = move[2]+move[3]
+        var start = [parseInt(startPos[1])-1, startPos[0].charCodeAt(0)-97]
+        var end = [parseInt(endPos[1])-1, endPos[0].charCodeAt(0)-97]
+        // var promotion = predictions.get("promotion")
+        var newPiece
+        if (gameStarted && !hasGameEnded()){
+            if (tiles[start[0]][start[1]]){
+                var piece = tiles[start[0]][start[1]].pId
+                console.log(start, end, piece)
+                if (validMove(piece, start, end, tiles)){
+                    console.log("Moving ", tiles[start[0]][start[1]].pId)
+                    tiles[end[0]][end[1]] = tiles[start[0]][start[1]]
+                    tiles[start[0]][start[1]] = null
+                    tiles[end[0]][end[1]].firstMove = false
+
+                    // if (promotion==="q")
+                    //     newPiece = "queen"
+                    // else if (promotion==="k")
+                    //     newPiece = "knight"
+                    // else if (promotion==="b")
+                    //     newPiece = "bishop"
+                    // else if (promotion==="r")
+                    //     newPiece = "rook"
+                    
+                    // if (promotion!==""){
+                    //     var count
+                    //     if (pieceColour(piece)==="w"){
+                    //         count = promotedCountW.toString()
+                    //         promotedCountW = (promotedCountW+1)%10
+                    //     } else {
+                    //         count = promotedCountB.toString()
+                    //         promotedCountB = (promotedCountB+1)%10
+                    //     }
+
+                    //     tiles[end[0]][end[1]] = new ChessPiece(`${newPiece}_${pieceColour(piece)}`, count, end[0], end[1])
+                    // }
+                    
+                        
+
+                    movesList.push(startPos+endPos)
+                    console.log(movesList)
+
+                    storeBoardStatus(tiles)
+                    boardRepetition = boardRepeated()
+                    console.log("repeated", boardRepetition)
+
+                    highlightTiles("tile"+start[0].toString()+start[1].toString(), "tile"+end[0].toString()+end[1].toString())
+
+                    Chessboard.setStockfishState(piece)
+
+                }
+            } 
+        }
+    } else {
+        setTimeout(() => {
+                        var requestOptions = {
+                            method: 'GET',
+                            redirect: 'follow'
+                          };
+                          
+                          fetch(`http://taytay.pythonanywhere.com/get-opponent-move?game_id=${gameId}&player=${myUsername}`, requestOptions)
+                            .then(response => response.text())
+                            .then(result => multiPlayerMove(result))
+                            .catch(error => multiPlayerMove(error));
+                    }, 100)
+    }
 }
 
 const stockfishMove = (predictions) => {
@@ -399,6 +513,8 @@ const Chessboard = () => {
         var end = [endX, endY]
 
         console.log("Mode", gameMode)
+        console.log("Game Id", gameId)
+        console.log("Opponent", opponent)
 
         if (getPlayer()!==opponent && !hasGameEnded() && validMove(droppedId, start, end, tiles))
         {
@@ -438,7 +554,33 @@ const Chessboard = () => {
                 //         console.log("Check")
                 //     }
                 // }
-                if (getPlayer()===opponent){
+                if (gameMode==="m"){
+                    var currMove = columns[startY]+rows[startX]+columns[endY]+rows[endX]
+                    
+                    // sendMove(columns[startY]+rows[startX]+columns[endY]+rows[endX], hasGameEnded(), opponent)
+                    var requestOptions = {
+                        method: 'GET',
+                        redirect: 'follow'
+                      };
+                      
+                      fetch(`http://taytay.pythonanywhere.com/make-move?game_id=${gameId}&player=${myUsername}&move=${currMove}`, requestOptions)
+                        .catch(error => console.log('error', error));
+                }
+                if (gameMode==="m"){
+                    setTimeout(() => {
+                        var requestOptions = {
+                            method: 'GET',
+                            redirect: 'follow'
+                          };
+                          
+                          fetch(`http://taytay.pythonanywhere.com/get-opponent-move?game_id=${gameId}&player=${myUsername}`, requestOptions)
+                            .then(response => response.text())
+                            .then(result => multiPlayerMove(result))
+                            .catch(error => multiPlayerMove(error));
+                    }, 100)
+                }
+                
+                if (getPlayer()===opponent && gameMode==="s"){
                     console.log("opponents turn")
                     engine.predict(movesList)
                 }
@@ -511,5 +653,5 @@ const Chessboard = () => {
 
 
 export default Chessboard
-export {pieceColour, promotePawnTo, setOpponent, refreshBoard}
+export {pieceColour, promotePawnTo, setOpponent, refreshBoard, setUsername}
 

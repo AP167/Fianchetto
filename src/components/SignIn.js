@@ -68,7 +68,7 @@ export default function SignIn() {
                                     <h4>Sign In</h4>
                                 </Typography>
                             </Button>
-                            <Button onClick={() => navigate('/signUp')}  sx = {{
+                            <Button onClick={() => navigate('/sign-up')}  sx = {{
                                 m: 1.5,
                                 color: '#321313',
                                 left: '14%',
