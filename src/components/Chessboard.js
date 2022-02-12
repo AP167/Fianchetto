@@ -140,6 +140,7 @@ const setOpponent = (opp, mode, gId, player2) => {
                 .then(result => multiPlayerMove(result))
                 .catch(error => multiPlayerMove(error));
         }, 100)
+        rotateBoard("b")
     }
     // setTimeout(() => {gameStartAudio.play()}, 200)
     // if (gameMode==="m"){
