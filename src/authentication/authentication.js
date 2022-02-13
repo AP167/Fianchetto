@@ -4,13 +4,12 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, si
 
 function initApp(){
 const firebaseConfig = {
-  apiKey: "AIzaSyDuVuumoKaV9F17ZszZXp3FHYV2rcy-ig0",
-  authDomain: "fianchetto-b5d9d.firebaseapp.com",
-  projectId: "fianchetto-b5d9d",
-  storageBucket: "fianchetto-b5d9d.appspot.com",
-  messagingSenderId: "139019014751",
-  appId: "1:139019014751:web:8cbb1bd7b2c6ad92d881ea",
-  measurementId: "G-N2ZDXWBXLE"
+   apiKey: "AIzaSyDMGuhAdH-hQFfuHKfi8WdbL3uwDlEtrJg",
+  authDomain: "fianchettoweb.firebaseapp.com",
+  projectId: "fianchettoweb",
+  storageBucket: "fianchettoweb.appspot.com",
+  messagingSenderId: "909152325887",
+  appId: "1:909152325887:web:de525a29fc38dc384dfcca"
 };
 
 const app = initializeApp(firebaseConfig);
