@@ -5,14 +5,14 @@ import { changeUser } from '../App';
 import {writeUserData} from '../db/db'
 
 function initApp(){
-	const firebaseConfig = {
-		apiKey: "AIzaSyDMGuhAdH-hQFfuHKfi8WdbL3uwDlEtrJg",
-		authDomain: "fianchettoweb.firebaseapp.com",
-		projectId: "fianchettoweb",
-		storageBucket: "fianchettoweb.appspot.com",
-		messagingSenderId: "909152325887",
-		appId: "1:909152325887:web:de525a29fc38dc384dfcca"
-	   };
+const firebaseConfig = {
+   apiKey: "AIzaSyDMGuhAdH-hQFfuHKfi8WdbL3uwDlEtrJg",
+  authDomain: "fianchettoweb.firebaseapp.com",
+  projectId: "fianchettoweb",
+  storageBucket: "fianchettoweb.appspot.com",
+  messagingSenderId: "909152325887",
+  appId: "1:909152325887:web:de525a29fc38dc384dfcca"
+};
 
 const app = initializeApp(firebaseConfig);
 return app;
