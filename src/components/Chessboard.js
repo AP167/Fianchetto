@@ -539,8 +539,9 @@ const Chessboard = () => {
         resetState()
         resetBoardStatus()
         storeBoardStatus(tiles)
-        document.getElementById("play-menu").style.visibility="visible"
-        document.getElementById("play-menu").style.zIndex="5"
+        document.getElementById("play-menu").style.visibility = "visible"
+        document.getElementById("play-menu").style.zIndex = "5"
+        document.getElementById("draw-btn").style.visibility = "visible"
     }
 
     const checkDraw = (event) => {
@@ -571,21 +572,23 @@ const Chessboard = () => {
         else{
             // document.getElementById("offer-menu").style.visibility="visible"
             // document.getElementById("offer-menu").style.zIndex="4"
-            var requestOptions = {
-                method: 'GET',
-                redirect: 'follow'
-            };
-            fetch(`https://taytay.pythonanywhere.com/make-move?game_id=${gameId}&player=${myUsername}&move=offer`, requestOptions)
-            .catch(error => console.log('error', error));
-            // showResult("Draw by mutual agreement", "d")
-            
-            setTimeout(() => {
-                  
-                  fetch(`https://taytay.pythonanywhere.com/get-opponent-move?game_id=${gameId}&player=${myUsername}`, requestOptions)
-                    .then(response => response.text())
-                    .then(result => multiPlayerMove(result))
-                    .catch(error => multiPlayerMove(error));
-            }, 100)
+            if (gameMode==="m"){
+                var requestOptions = {
+                    method: 'GET',
+                    redirect: 'follow'
+                };
+                fetch(`https://taytay.pythonanywhere.com/make-move?game_id=${gameId}&player=${myUsername}&move=offer`, requestOptions)
+                .catch(error => console.log('error', error));
+                // showResult("Draw by mutual agreement", "d")
+                
+                setTimeout(() => {
+                      
+                      fetch(`https://taytay.pythonanywhere.com/get-opponent-move?game_id=${gameId}&player=${myUsername}`, requestOptions)
+                        .then(response => response.text())
+                        .then(result => multiPlayerMove(result))
+                        .catch(error => multiPlayerMove(error));
+                }, 100)
+            }
             
         }
     }

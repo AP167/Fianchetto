@@ -21,6 +21,7 @@ const getResult = () => result
 const showResult = (newGameStatus, newWinner) => {
     document.getElementById("result-container").style.visibility="visible"
     document.getElementById("result-container").style.zIndex="3"
+    document.getElementById("draw-btn").style.visibility = "hidden"
 
     gameEnded = true
 
