@@ -21,10 +21,6 @@ return app;
 const app=initApp();
 const auth = getAuth(app);
 
-
-
-
-
 function signUpWithEmailPass(email, password, username, gotoNextPage){
 
 	// const app=initApp();
