@@ -28,7 +28,7 @@ const GameIdDialog = () => {
     <div id="gameid-menu-container">
         <div className="gameid-menu">
             <h2 className="menu-title">Play with a friend</h2>
-            <h3>Copy the game id and send it to your friend</h3>
+            <h3>Copy the game id and send it to your friend!</h3>
             <div className="gameid-copy">
                 <input type="text" id="copy-game-id" disabled />
                 <div class="tooltip">

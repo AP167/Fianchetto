@@ -29,6 +29,7 @@ const pawnPromotion = (piece, pos) => {
         pawnPosition = pos
         document.getElementById("dialog-container").style.visibility="visible"
         document.getElementById("dialog-container").style.zIndex="3"
+        return true
       }
     }
 }

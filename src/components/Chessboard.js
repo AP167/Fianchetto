@@ -179,39 +179,44 @@ const multiPlayerMove = (move) => {
         var endPos = move[2]+move[3]
         var start = [parseInt(startPos[1])-1, startPos[0].charCodeAt(0)-97]
         var end = [parseInt(endPos[1])-1, endPos[0].charCodeAt(0)-97]
-        // var promotion = predictions.get("promotion")
+        var promotion = move[4]
         var newPiece
+        console.log("1", tiles[start[0]][start[1]],tiles[end[0]][end[1]])
         if (gameStarted && !hasGameEnded()){
             if (tiles[start[0]][start[1]]){
                 var piece = tiles[start[0]][start[1]].pId
                 console.log(start, end, piece)
                 if (validMove(piece, start, end, tiles)){
+                    console.log("2", tiles[start[0]][start[1]],tiles[end[0]][end[1]])
                     console.log("Moving ", tiles[start[0]][start[1]].pId)
                     tiles[end[0]][end[1]] = tiles[start[0]][start[1]]
                     tiles[start[0]][start[1]] = null
                     tiles[end[0]][end[1]].firstMove = false
+                    console.log("3", tiles[start[0]][start[1]],tiles[end[0]][end[1]])
 
-                    // if (promotion==="q")
-                    //     newPiece = "queen"
-                    // else if (promotion==="k")
-                    //     newPiece = "knight"
-                    // else if (promotion==="b")
-                    //     newPiece = "bishop"
-                    // else if (promotion==="r")
-                    //     newPiece = "rook"
+                    if (promotion==="q")
+                        newPiece = "queen"
+                    else if (promotion==="n")
+                        newPiece = "knight"
+                    else if (promotion==="b")
+                        newPiece = "bishop"
+                    else if (promotion==="r")
+                        newPiece = "rook"
                     
-                    // if (promotion!==""){
-                    //     var count
-                    //     if (pieceColour(piece)==="w"){
-                    //         count = promotedCountW.toString()
-                    //         promotedCountW = (promotedCountW+1)%10
-                    //     } else {
-                    //         count = promotedCountB.toString()
-                    //         promotedCountB = (promotedCountB+1)%10
-                    //     }
+                    if (promotion!=="" && promotion!=="x"){
+                        var count
+                        if (pieceColour(piece)==="w"){
+                            count = promotedCountW.toString()
+                            promotedCountW = (promotedCountW+1)%10
+                        } else {
+                            count = promotedCountB.toString()
+                            promotedCountB = (promotedCountB+1)%10
+                        }
 
-                    //     tiles[end[0]][end[1]] = new ChessPiece(`${newPiece}_${pieceColour(piece)}`, count, end[0], end[1])
-                    // }
+                        tiles[end[0]][end[1]] = new ChessPiece(`${newPiece}_${pieceColour(piece)}`, count, end[0], end[1])
+                    }
+
+                    console.log("4", tiles[start[0]][start[1]],tiles[end[0]][end[1]])
                     
                         
 
@@ -331,16 +336,47 @@ const promotePawnTo = (piece, oldPiece, pos) => {
     }
 
     tiles[pos[0]][pos[1]] = new ChessPiece(`${piece}_${pieceColour(oldPiece)}`, count, pos[0], pos[1])
-    movesList[movesList.length - 1] = movesList[movesList.length - 1] + piece[0]
+    movesList[movesList.length - 1] = movesList[movesList.length - 1] + (piece[0]==="k" ? "n" : piece[0])
     console.log(movesList)
 
-    popBoardStatus()
+    // popBoardStatus()
     storeBoardStatus(tiles)
 
     document.getElementById("dialog-container").style.visibility="hidden"
     document.getElementById("dialog-container").style.zIndex="-3"
 
     Chessboard.setNewState(piece)
+
+    if (gameMode==="m"){
+        var currMove = movesList[movesList.length-1]
+        
+        // sendMove(columns[startY]+rows[startX]+columns[endY]+rows[endX], hasGameEnded(), opponent)
+        var requestOptions = {
+            method: 'GET',
+            redirect: 'follow'
+        };
+        
+        fetch(`https://taytay.pythonanywhere.com/make-move?game_id=${gameId}&player=${myUsername}&move=${currMove}`, requestOptions)
+            .catch(error => console.log('error', error));
+    }
+    if (gameMode==="m"){
+        setTimeout(() => {
+            var requestOptions = {
+                method: 'GET',
+                redirect: 'follow'
+            };
+            
+            fetch(`https://taytay.pythonanywhere.com/get-opponent-move?game_id=${gameId}&player=${myUsername}`, requestOptions)
+                .then(response => response.text())
+                .then(result => multiPlayerMove(result))
+                .catch(error => multiPlayerMove(error));
+        }, 100)
+    }
+    
+    if (getPlayer()===opponent && gameMode==="s"){
+        console.log("opponents turn")
+        engine.predict(movesList)
+    }
 
 }
 
@@ -541,64 +577,68 @@ const Chessboard = () => {
 
                 movesList.push(columns[startY]+rows[startX]+columns[endY]+rows[endX])
                 console.log(movesList)
-
-                pawnPromotion(droppedId, end)
-
-                storeBoardStatus(tiles)
-                boardRepetition = boardRepeated()
-                console.log("repeated", boardRepetition)
-
                 highlightTiles(startTile, endTile)
 
-                currCheckStatus(droppedId)
-                // if (isStalemate(tiles)){
-                //     if(isCheck(pieceColour(droppedId)==="w" ? "b" : "w", tiles)){
-                //         setTimeout(() => {checkmateAudio.play()}, 200)
-                //         showResult("Checkmate", pieceColour(droppedId))
-                //     } else {
-                //         setTimeout(() => {stalemateAudio.play()}, 200)
-                //         showResult("Stalemate", "d")
-                //     }
-                // } else {
-                //     if(isCheck(pieceColour(droppedId)==="w" ? "b" : "w", tiles)){
-                //         setTimeout(() => {checkAudio.play()}, 200)
-                //         console.log("Check")
-                //     }
-                // }
-                if (gameMode==="m"){
-                    var currMove = columns[startY]+rows[startX]+columns[endY]+rows[endX]
+                if (!pawnPromotion(droppedId, end)){
+                    storeBoardStatus(tiles)
+                    boardRepetition = boardRepeated()
+                    console.log("repeated", boardRepetition)
+
                     
-                    // sendMove(columns[startY]+rows[startX]+columns[endY]+rows[endX], hasGameEnded(), opponent)
-                    var requestOptions = {
-                        method: 'GET',
-                        redirect: 'follow'
-                      };
-                      
-                      fetch(`https://taytay.pythonanywhere.com/make-move?game_id=${gameId}&player=${myUsername}&move=${currMove}`, requestOptions)
-                        .catch(error => console.log('error', error));
-                }
-                if (gameMode==="m"){
-                    setTimeout(() => {
+
+                    currCheckStatus(droppedId)
+                    // if (isStalemate(tiles)){
+                    //     if(isCheck(pieceColour(droppedId)==="w" ? "b" : "w", tiles)){
+                    //         setTimeout(() => {checkmateAudio.play()}, 200)
+                    //         showResult("Checkmate", pieceColour(droppedId))
+                    //     } else {
+                    //         setTimeout(() => {stalemateAudio.play()}, 200)
+                    //         showResult("Stalemate", "d")
+                    //     }
+                    // } else {
+                    //     if(isCheck(pieceColour(droppedId)==="w" ? "b" : "w", tiles)){
+                    //         setTimeout(() => {checkAudio.play()}, 200)
+                    //         console.log("Check")
+                    //     }
+                    // }
+                    if (gameMode==="m"){
+                        var currMove = columns[startY]+rows[startX]+columns[endY]+rows[endX]+"x"
+                        
+                        // sendMove(columns[startY]+rows[startX]+columns[endY]+rows[endX], hasGameEnded(), opponent)
                         var requestOptions = {
                             method: 'GET',
                             redirect: 'follow'
-                          };
-                          
-                          fetch(`https://taytay.pythonanywhere.com/get-opponent-move?game_id=${gameId}&player=${myUsername}`, requestOptions)
-                            .then(response => response.text())
-                            .then(result => multiPlayerMove(result))
-                            .catch(error => multiPlayerMove(error));
-                    }, 100)
+                        };
+                        
+                        fetch(`https://taytay.pythonanywhere.com/make-move?game_id=${gameId}&player=${myUsername}&move=${currMove}`, requestOptions)
+                            .catch(error => console.log('error', error));
+                    }
+                    if (gameMode==="m"){
+                        setTimeout(() => {
+                            var requestOptions = {
+                                method: 'GET',
+                                redirect: 'follow'
+                            };
+                            
+                            fetch(`https://taytay.pythonanywhere.com/get-opponent-move?game_id=${gameId}&player=${myUsername}`, requestOptions)
+                                .then(response => response.text())
+                                .then(result => multiPlayerMove(result))
+                                .catch(error => multiPlayerMove(error));
+                        }, 100)
+                    }
+                    
+                    if (getPlayer()===opponent && gameMode==="s"){
+                        console.log("opponents turn")
+                        engine.predict(movesList)
+                    }
+                    if (boardRepeated()===5)
+                        showResult("Fivefold Repetition", "d")
+                    if (getNoCapture()===75)
+                        showResult("Seventy-five move rule", "d")
+
                 }
+
                 
-                if (getPlayer()===opponent && gameMode==="s"){
-                    console.log("opponents turn")
-                    engine.predict(movesList)
-                }
-                if (boardRepeated()===5)
-                    showResult("Fivefold Repetition", "d")
-                if (getNoCapture()===75)
-                    showResult("Seventy-five move rule", "d")
             }
         }
     }
