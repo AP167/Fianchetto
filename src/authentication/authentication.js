@@ -18,11 +18,6 @@ const app = initializeApp(firebaseConfig);
 return app;
 }
 
-var app=initApp()
-const db = getFirestore(app)
-
-
-
 
 function signUpWithEmailPass(email, password, username, gotoNextPage){
 
