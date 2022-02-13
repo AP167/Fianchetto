@@ -1,0 +1,82 @@
+.sign-in-page{
+    height: 100vh;
+    width: 100vw;
+    background: linear-gradient(45deg, rgba(152,118,94,1) 3%, rgba(205,157,109,1) 58%, rgba(252,199,132,1) 96%);
+    display: flex;
+    flex-direction: row;
+}
+
+#sign-in-container{
+    height: 80vh;
+    width: 40vw;
+    background-color: rgb(218, 199, 175);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 10vh;
+}
+
+.textfield-container{
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+}
+
+.sign-up-option{
+    color: rgb(65, 44, 21);
+    padding: 2vh;
+    width: 27.2vw;
+    font-size: 2vh;
+    text-align: center;
+}
+
+.sign-up-option a{
+    text-decoration: none;
+    font-weight: bold;
+    color: rgb(161, 71, 29);
+    cursor: pointer;
+}
+
+.sign-up-option a:hover{
+    text-decoration: underline;
+}
+
+.sign-app-title{
+    width: 40vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.sign-app-name{
+    color: rgb(65, 44, 21);
+    margin: 8vh;
+}
+
+.sign-app-logo{
+    height: 30vh;
+}
+
+/* .play-btn-grp{
+    height: 30vh;
+    padding: 2vh 10vw 2vh 10vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+} */
+
+.sign-in-btn{
+    margin: 2vh;
+    width: 27.2vw;
+    padding: 2vh;
+    text-align: center;
+    background-color: rgb(134, 102, 62);
+    border: 2px solid rgb(71, 54, 38);
+    border-radius: 2px;
+}
+.sign-in-btn:hover{
+    background-color: rgb(153, 117, 73);
+}

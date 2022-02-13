@@ -1,16 +1,15 @@
-import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import SignIn from "./components/SignIn";
-import SignUp from "./components/SignUp";
+import { BrowserRouter as Router, Routes, Route} from "react-router-dom"
 import GamePage from "./components/GamePage"
-import HomePage from "./components/HomePage";
+import HomePage from "./components/HomePage"
+import SignInPage from "./components/SignInPage"
 
 export default function App() {
     return (
         <Router>
             <Routes>
                 <Route path ='/' element={<HomePage />} />
-                <Route path = '/sign-up' element={<SignUp />} />
-                <Route path = '/sign-in' element={<SignIn />} />
+                <Route path = '/sign-up' element={<SignInPage sign="Up" />} />
+                <Route path = '/sign-in' element={<SignInPage sign="In" />} />
                 <Route path = '/game-page' element={<GamePage />} />
             </Routes>
         </Router>
