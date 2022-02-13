@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { getAuth, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { changeUser } from '../App';
 // import {nextPage} from "../components/SignIn"
 import {writeUserData} from '../db/db'
@@ -18,6 +18,8 @@ const app = initializeApp(firebaseConfig);
 return app;
 }
 
+const app=initApp();
+const auth = getAuth(app);
 
 
 
@@ -25,18 +27,26 @@ return app;
 
 function signUpWithEmailPass(email, password, username, gotoNextPage){
 
-	const app=initApp();
-	const auth = getAuth(app);
+	// const app=initApp();
+	// const auth = getAuth(app);
 	var status='success';
 	createUserWithEmailAndPassword(auth, email, password)
 	  .then((userCredential) => {
 	    // Signed in 
 	    const user = userCredential.user;
-		user.displayName = username
-		changeUser(user.uid, user.displayName)
-	    console.log("Sign Up Success");
-		writeUserData(username, email)
-		gotoNextPage(status, user.uid)
+		// user.displayName = username
+		updateProfile(auth.currentUser, {
+			displayName: username
+		  }).then(() => {
+			changeUser(user.uid, user.displayName)
+			console.log("Sign Up Success");
+			writeUserData(username, email)
+			gotoNextPage(status, user.uid)
+		  }).catch((error) => {
+			// An error occurred
+			// ...
+		  });
+		
 	  })
 	  .catch((error) => {
 	    const errorCode = error.code;
@@ -50,8 +60,8 @@ function signUpWithEmailPass(email, password, username, gotoNextPage){
 }
 
 function signInWithEmailPass(email, password, gotoNextPage){
-	const app=initApp();
-	const auth = getAuth(app);
+	// const app=initApp();
+	// const auth = getAuth(app);
 	var status='success';
 	signInWithEmailAndPassword(auth, email, password)
 	  .then((userCredential) => {
