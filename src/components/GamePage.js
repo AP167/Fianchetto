@@ -6,6 +6,8 @@ import ResultDialog from './ResultDialog'
 import PlayMenu from './PlayMenu'
 import StockfishDialog from './StockfishDialog'
 import { useLocation } from 'react-router-dom'
+import MultiplayerDialog from './MultiplayerDialog'
+import GameIdDialog from './GameIdDialog'
 
 function GamePage() {
   const {state} = useLocation() 
@@ -22,6 +24,8 @@ function GamePage() {
     <div className="GamePage">
       <PlayMenu />
       <StockfishDialog />
+      <MultiplayerDialog />
+      <GameIdDialog />
       <Chessboard />
       <DialogBox />
       <ResultDialog />

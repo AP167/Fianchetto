@@ -31,14 +31,14 @@
     text-align: center;
 }
 
-.sign-up-option a{
+.sign-up-option span{
     text-decoration: none;
     font-weight: bold;
     color: rgb(161, 71, 29);
     cursor: pointer;
 }
 
-.sign-up-option a:hover{
+.sign-up-option span:hover{
     text-decoration: underline;
 }
 

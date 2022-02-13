@@ -63,6 +63,8 @@ var origTileColour = [null, null, null, null]
 const setUsername = (user1) =>{
     myUsername = user1
 }
+
+const getGameId = () => gameId
 /* gameStarted is only to stop the stockfish from making a move from the previous 
 data after new game btn is clicked */
 
@@ -117,6 +119,8 @@ const setOpponent = (opp, mode, gId, player2) => {
     document.getElementById("play-menu").style.zIndex="-5"
     document.getElementById("stockfish-menu-container").style.visibility="hidden"
     document.getElementById("stockfish-menu-container").style.zIndex="-4"
+    document.getElementById("multiplayer-menu-container").style.visibility="hidden"
+    document.getElementById("multiplayer-menu-container").style.zIndex="-4"
     document.getElementById("highlight-switch").checked = getHighlightOn()
     document.getElementById("sound-switch").checked = getSoundOn()
 
@@ -141,6 +145,12 @@ const setOpponent = (opp, mode, gId, player2) => {
                 .catch(error => multiPlayerMove(error));
         }, 100)
         rotateBoard("b")
+    }
+
+    if (opp==="b" && mode==="m"){
+        document.getElementById("copy-game-id").value = getGameId()
+        document.getElementById("gameid-menu-container").style.visibility="visible"
+        document.getElementById("gameid-menu-container").style.zIndex="4"
     }
     // setTimeout(() => {gameStartAudio.play()}, 200)
     // if (gameMode==="m"){

@@ -1,0 +1,123 @@
+#gameid-menu-container{
+    height: 100vh;
+    width: 100vw;
+    background: linear-gradient(45deg, rgba(152,118,94,1) 3%, rgba(205,157,109,1) 58%, rgba(252,199,132,1) 96%);
+    visibility: hidden;
+    z-index: -4;
+    position: fixed;
+    display: grid;
+    place-content: center;
+}
+
+.gameid-menu{
+    height: 80vh;
+    width: 50vw;
+    background-color: rgb(218, 199, 175);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+    margin: 10vh;
+}
+
+.gameid-menu h2{
+    color: rgb(65, 44, 21);
+    margin: 5vh;
+    text-align: center;
+}
+
+.gameid-menu h3{
+    text-align: center;
+}
+
+
+#copy-game-id{
+    background: rgb(230, 195, 122);
+    border: 2px solid rgb(71, 54, 38);
+    border-radius: 3px;
+    padding: 3px;
+    height: 8vh;
+    width: 25vw;
+    font-size: 3vh;
+}
+
+#copy-game-id:focus{
+    outline: none;
+}
+
+.copy-btn{
+    background-color: rgb(109, 91, 75);
+    border: 2px solid rgb(71, 54, 38);
+    border-radius: 3px;
+    font-size: 3vh;
+    width: 4vw;
+    height: 100%;
+    margin-left: 1vw;
+    cursor: pointer;
+}
+
+.copy-btn:hover{
+    background-color: rgb(153, 117, 73);
+}
+
+
+.gameid-copy{
+    display: flex;
+    flex-direction: row;
+}
+
+.okay-btn{
+    margin: 2vh 2vh 2vh 3vh;
+    width: 10vw;
+    padding: 2vh;
+    text-align: center;
+    background-color: rgb(134, 102, 62);
+    border: 2px solid rgb(71, 54, 38);
+    border-radius: 2px;
+    cursor: pointer;
+}
+.okay-btn:hover{
+    background-color: rgb(153, 117, 73);
+}
+
+
+
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 140px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -75px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  }
+  
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }

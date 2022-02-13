@@ -71,7 +71,7 @@ const SignInPage = (props) => {
                 </button>
                 <h3 className="sign-up-option">
                     {props.sign==="In" ? "Don't" : "Already"} have an account? 
-                    <a onClick={() => navigate(`/sign-${props.sign==="In" ? "up" : "in"}`)}> Sign {props.sign==="In" ? "up" : "in"}</a> here
+                    <span onClick={() => navigate(`/sign-${props.sign==="In" ? "up" : "in"}`)}> Sign {props.sign==="In" ? "up" : "in"}</span> here
                 </h3>
             </form>
             <div className="sign-app-title">
