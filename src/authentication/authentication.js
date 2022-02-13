@@ -1,23 +1,29 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { changeUser } from '../App';
 // import {nextPage} from "../components/SignIn"
+import {writeUserData} from '../db/db'
 
 function initApp(){
-const firebaseConfig = {
-  apiKey: "AIzaSyDuVuumoKaV9F17ZszZXp3FHYV2rcy-ig0",
-  authDomain: "fianchetto-b5d9d.firebaseapp.com",
-  projectId: "fianchetto-b5d9d",
-  storageBucket: "fianchetto-b5d9d.appspot.com",
-  messagingSenderId: "139019014751",
-  appId: "1:139019014751:web:8cbb1bd7b2c6ad92d881ea",
-  measurementId: "G-N2ZDXWBXLE"
-};
+	const firebaseConfig = {
+		apiKey: "AIzaSyDMGuhAdH-hQFfuHKfi8WdbL3uwDlEtrJg",
+		authDomain: "fianchettoweb.firebaseapp.com",
+		projectId: "fianchettoweb",
+		storageBucket: "fianchettoweb.appspot.com",
+		messagingSenderId: "909152325887",
+		appId: "1:909152325887:web:de525a29fc38dc384dfcca"
+	   };
 
 const app = initializeApp(firebaseConfig);
 return app;
 }
 
-function signUpWithEmailPass(email, password, gotoNextPage){
+
+
+
+
+
+function signUpWithEmailPass(email, password, username, gotoNextPage){
 
 	const app=initApp();
 	const auth = getAuth(app);
@@ -26,7 +32,10 @@ function signUpWithEmailPass(email, password, gotoNextPage){
 	  .then((userCredential) => {
 	    // Signed in 
 	    const user = userCredential.user;
+		user.displayName = username
+		changeUser(user.uid, user.displayName)
 	    console.log("Sign Up Success");
+		writeUserData(username, email)
 		gotoNextPage(status, user.uid)
 	  })
 	  .catch((error) => {
@@ -48,8 +57,10 @@ function signInWithEmailPass(email, password, gotoNextPage){
 	  .then((userCredential) => {
 	    // Signed in 
 	    const user = userCredential.user;
+		console.log(user.displayName)
 	    console.log("Sign In Success");
 		console.log("uid", user.uid)
+		changeUser(user.uid, user.displayName)
 		gotoNextPage(status, user.uid)
 	  })
 	  .catch((error) => {

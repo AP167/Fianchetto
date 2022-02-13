@@ -65,6 +65,7 @@ const setUsername = (user1) =>{
 }
 
 const getGameId = () => gameId
+
 /* gameStarted is only to stop the stockfish from making a move from the previous 
 data after new game btn is clicked */
 
@@ -174,7 +175,19 @@ const setOpponent = (opp, mode, gId, player2) => {
 
 const multiPlayerMove = (move) => {
     console.log(move, gameId)
-    if (move.length===4 || move.length===5){
+    if (move==="threefold")
+        showResult("Threefold Repetition", "d")
+    else if (move==="fiftymove")
+        showResult("Fifty move Rule", "d")
+    else if (move==="offer"){
+        document.getElementById("offer-menu").style.visibility="visible"
+        document.getElementById("offer-menu").style.zIndex="4"
+    }
+    else if (move==="accept")
+        showResult("Draw by mutual agreement", "d")
+    else if (move==="reject")
+        alert("Your draw offer was rejected")
+    else if (move.length===4 || move.length===5){
         var startPos = move[0]+move[1]
         var endPos = move[2]+move[3]
         var start = [parseInt(startPos[1])-1, startPos[0].charCodeAt(0)-97]
@@ -531,12 +544,50 @@ const Chessboard = () => {
     }
 
     const checkDraw = (event) => {
-        if (getNoCapture()>=49)
+        if (getNoCapture()>=49){
             showResult("Fifty move Rule", "d")
-        else if(boardRepetition>=3)
+            if (getPlayer()!==opponent && gameMode==="m"){
+                
+                var requestOptions = {
+                    method: 'GET',
+                    redirect: 'follow'
+                };
+                fetch(`https://taytay.pythonanywhere.com/make-move?game_id=${gameId}&player=${myUsername}&move=fiftymove`, requestOptions)
+                .catch(error => console.log('error', error));
+            }
+        }
+        else if(boardRepetition>=3){
             showResult("Threefold Repetition", "d")
-        else
-            showResult("Draw by mutual agreement", "d")
+            if (getPlayer()!==opponent && gameMode==="m"){
+                
+                var requestOptions = {
+                    method: 'GET',
+                    redirect: 'follow'
+                };
+                fetch(`https://taytay.pythonanywhere.com/make-move?game_id=${gameId}&player=${myUsername}&move=threefold`, requestOptions)
+                .catch(error => console.log('error', error));
+            }
+        }
+        else{
+            // document.getElementById("offer-menu").style.visibility="visible"
+            // document.getElementById("offer-menu").style.zIndex="4"
+            var requestOptions = {
+                method: 'GET',
+                redirect: 'follow'
+            };
+            fetch(`https://taytay.pythonanywhere.com/make-move?game_id=${gameId}&player=${myUsername}&move=offer`, requestOptions)
+            .catch(error => console.log('error', error));
+            // showResult("Draw by mutual agreement", "d")
+            
+            setTimeout(() => {
+                  
+                  fetch(`https://taytay.pythonanywhere.com/get-opponent-move?game_id=${gameId}&player=${myUsername}`, requestOptions)
+                    .then(response => response.text())
+                    .then(result => multiPlayerMove(result))
+                    .catch(error => multiPlayerMove(error));
+            }, 100)
+            
+        }
     }
 
     const allowDrop = (event) => {
@@ -704,5 +755,5 @@ const Chessboard = () => {
 
 
 export default Chessboard
-export {pieceColour, promotePawnTo, setOpponent, refreshBoard, setUsername}
+export {pieceColour, promotePawnTo, setOpponent, refreshBoard, setUsername, getGameId, multiPlayerMove}
 

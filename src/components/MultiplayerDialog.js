@@ -2,20 +2,29 @@ import React from 'react'
 import './styles/MultiplayerDialog.css'
 import { TextField } from '@mui/material'
 import { createGame, joinAsOpponent } from './Challenge'
+import { getMyUsername } from '../App'
+import { getUserData } from '../db/db'
 
 
 const createNewGame = (event) => {
     event.preventDefault()
-    var userId = "Challenger"
+    var userId = getMyUsername()
     var oppId = document.getElementById("opp-id").value
-    createGame(userId, oppId )
+    getUserData(oppId)
+    .then((result) => {
+        if (result===null)
+            alert("User doesn't exist")
+        else
+            createGame(userId, oppId )
+    })
+    // createGame(userId, oppId )
     // setOpponent("", "m")
 }
 
 const joinGame = (event) => {
     event.preventDefault()
-    var userId = "Opponent"
-    var oppId = "Challenger"
+    var userId = getMyUsername()
+    var oppId = "Opponent"
     var gameId = document.getElementById("game-id").value
     joinAsOpponent(userId, oppId, gameId)
 }

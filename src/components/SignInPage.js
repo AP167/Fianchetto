@@ -3,6 +3,7 @@ import { TextField } from '@mui/material'
 import './styles/SignInPage.css'
 import { useNavigate } from 'react-router-dom'
 import { signInWithEmailPass, signUpWithEmailPass } from '../authentication/authentication'
+import { getUserData, writeUserData } from '../db/db'
 
 const SignInPage = (props) => {
 
@@ -14,12 +15,24 @@ const SignInPage = (props) => {
         event.preventDefault()
         const email = document.getElementById("email")
         const password = document.getElementById("password")
-        console.log(email.value, password.value)
 
         if (props.sign==="In")
             signInWithEmailPass(email.value, password.value, gotoNextPage)
-        else
-            signUpWithEmailPass(email.value, password.value, gotoNextPage)
+        else{
+            const username = document.getElementById("username")
+            console.log(username.value)
+            getUserData(username.value)
+            .then((userdata) => {
+                console.log(userdata)
+                if (userdata===null){
+                    signUpWithEmailPass(email.value, password.value, username.value, gotoNextPage)
+                }
+                else
+                    alert("Username already taken")
+                })
+            // writeUserData(email.value, username.value)
+            
+        }
     }
 
     const gotoNextPage = (status, userId) => {
@@ -76,7 +89,7 @@ const SignInPage = (props) => {
             </form>
             <div className="sign-app-title">
                 <img src="./fianchetto_vector.svg" alt="Logo" className="sign-app-logo" />
-                <div class="sign-app-name"><h1>Fianchetto</h1></div>
+                <div className="sign-app-name"><h1>Fianchetto</h1></div>
             </div>
         </div>
     )

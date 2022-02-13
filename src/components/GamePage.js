@@ -8,6 +8,7 @@ import StockfishDialog from './StockfishDialog'
 import { useLocation } from 'react-router-dom'
 import MultiplayerDialog from './MultiplayerDialog'
 import GameIdDialog from './GameIdDialog'
+import OfferDrawDialog from './OfferDrawDialog'
 
 function GamePage() {
   const {state} = useLocation() 
@@ -28,6 +29,7 @@ function GamePage() {
       <GameIdDialog />
       <Chessboard />
       <DialogBox />
+      <OfferDrawDialog />
       <ResultDialog />
     </div>
   );

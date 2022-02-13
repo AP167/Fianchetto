@@ -31,11 +31,11 @@ const GameIdDialog = () => {
             <h3>Copy the game id and send it to your friend!</h3>
             <div className="gameid-copy">
                 <input type="text" id="copy-game-id" disabled />
-                <div class="tooltip">
+                <div className="tooltip">
                     <button className="copy-btn" 
                     onClick={copyGameId}
                     onMouseOut={outsideCopy}>
-                        <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+                        <span className="tooltiptext" id="myTooltip">Copy to clipboard</span>
                         📋
                     </button>
                 </div>            

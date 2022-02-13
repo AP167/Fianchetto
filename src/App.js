@@ -3,6 +3,14 @@ import GamePage from "./components/GamePage"
 import HomePage from "./components/HomePage"
 import SignInPage from "./components/SignInPage"
 
+var myUid, myUsername
+const getMyUid = () => myUid
+const getMyUsername = () => myUsername
+const changeUser = (newUid, newUsername) => {
+    myUid = newUid
+    myUsername = newUsername
+}
+
 export default function App() {
     return (
         <Router>
@@ -15,3 +23,6 @@ export default function App() {
         </Router>
     )
 }
+
+
+export { getMyUid, getMyUsername, changeUser }
