@@ -523,7 +523,7 @@ const Chessboard = () => {
     const startNewGame = (event) => {
         event.preventDefault()
         console.log("new game started")
-        if (gameMode==="s" && opponent==="w"){
+        if (opponent==="w"){
             rotateBoard("w")
         }
         gameStarted = false
@@ -617,9 +617,9 @@ const Chessboard = () => {
         console.log("Game Id", gameId)
         console.log("Opponent", opponent)
 
-        if (getPlayer()!==opponent && !hasGameEnded() && validMove(droppedId, start, end, tiles))
+        if (droppedAtId.startsWith("tile") || pieceColour(droppedId) !== pieceColour(droppedAtId))
         {
-            if (droppedAtId.startsWith("tile") || pieceColour(droppedId) !== pieceColour(droppedAtId)){
+            if (getPlayer()!==opponent && !hasGameEnded() && validMove(droppedId, start, end, tiles)){
                 setTurn(turn==="w" ? "b" : "w")
                 console.log("Moving ", tiles[startX][startY].pId)
                 tiles[endX][endY] = tiles[startX][startY]

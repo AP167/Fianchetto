@@ -15,7 +15,7 @@ export default function App() {
     return (
         <Router>
             <Routes>
-                <Route path ='/' element={<HomePage />} />
+                <Route path = '/' element={<HomePage />} />
                 <Route path = '/sign-up' element={<SignInPage sign="Up" />} />
                 <Route path = '/sign-in' element={<SignInPage sign="In" />} />
                 <Route path = '/game-page' element={<GamePage />} />
